@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mis Consultas | Portal del Paciente</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/portal.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body class="portal-body">
+
+<header class="portal-header">
+
+    <div class="portal-header-left">
+
+        <button class="portal-menu-btn" id="portalMenuBtn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <a href="portal-paciente.html" class="portal-logo">
+
+            <div class="portal-logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+
+            <div>
+                <strong>San Juan de Dios</strong>
+                <span>Portal del Paciente</span>
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="portal-header-right">
+
+        <div class="portal-user-mini">
+
+            <div class="portal-user-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div class="portal-user-info">
+                <strong id="portalUserName">Paciente</strong>
+                <span id="portalUserDni">DNI: --------</span>
+            </div>
+
+        </div>
+
+        <button class="portal-logout-btn" id="logoutBtn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Salir</span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="portal-layout">
+
+<aside class="portal-sidebar" id="portalSidebar">
+
+    <div class="portal-sidebar-title">
+        MI CUENTA
+    </div>
+
+    <nav class="portal-nav">
+
+        <a href="portal-paciente.html" class="portal-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Inicio</span>
+        </a>
+
+        <a href="mis-datos.html" class="portal-nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>Mis datos</span>
+        </a>
+
+        <a href="mis-citas.html" class="portal-nav-item">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Mis citas</span>
+        </a>
+
+        <a href="mis-consultas.html" class="portal-nav-item active">
+            <i class="fa-solid fa-stethoscope"></i>
+            <span>Mis consultas</span>
+        </a>
+
+        <a href="mis-medicos.html" class="portal-nav-item">
+            <i class="fa-solid fa-user-doctor"></i>
+            <span>Mis médicos</span>
+        </a>
+
+        <a href="mis-recetas.html" class="portal-nav-item">
+            <i class="fa-solid fa-prescription-bottle-medical"></i>
+            <span>Mis recetas</span>
+        </a>
+
+        <a href="historial-clinico.html" class="portal-nav-item">
+            <i class="fa-solid fa-file-medical"></i>
+            <span>Historial clínico</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<main class="portal-main">
+
+    <div class="portal-page-header">
+
+        <div>
+
+            <span class="portal-welcome-label">
+                ATENCIÓN MÉDICA
+            </span>
+
+            <h1>
+                Mis consultas
+            </h1>
+
+            <p>
+                Consulta el registro de tus atenciones médicas.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <section class="consultations-container">
+
+        <div class="consultation-card">
+
+            <div class="consultation-date">
+                <span>---</span>
+                <strong>---</strong>
+            </div>
+
+            <div class="consultation-content">
+
+                <div class="consultation-header">
+
+                    <div>
+
+                        <span class="consultation-type">
+                            Consulta médica
+                        </span>
+
+                        <h3>
+                            No hay consultas registradas
+                        </h3>
+
+                    </div>
+
+                    <span class="status-badge completed">
+                        Sin registros
+                    </span>
+
+                </div>
+
+                <p>
+                    Cuando se registre una atención médica,
+                    la información aparecerá en esta sección.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="portal-info-banner">
+
+        <div class="info-banner-icon">
+            <i class="fa-solid fa-circle-info"></i>
+        </div>
+
+        <div>
+
+            <h3>
+                Información de tus consultas
+            </h3>
+
+            <p>
+                Aquí podrás revisar las atenciones realizadas,
+                especialidad, profesional y fecha de consulta.
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+</div>
+
+
+<script src="../js/main.js"></script>
+<script src="../js/portal.js"></script>
+
+</body>
+</html>
