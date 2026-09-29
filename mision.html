@@ -2,30 +2,35 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Misión | Centro de Salud San Juan de Dios</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>Misión | San Juan de Dios</title>
+
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
 </head>
 
 <body>
 
-<header class="site-header">
+<header class="site-header" id="siteHeader">
 
     <div class="header-inner">
 
         <a href="index.html" class="brand">
 
-            <div class="brand-icon">
-                <span>✚</span>
-            </div>
+            <div class="brand-icon">✚</div>
 
             <div class="brand-text">
                 <strong>San Juan de Dios</strong>
@@ -34,27 +39,45 @@
 
         </a>
 
-        <nav class="main-nav" aria-label="Navegación principal">
+
+        <nav class="main-nav" id="mainNav">
 
             <a href="index.html">Inicio</a>
             <a href="especialidades.html">Especialidades</a>
-            <a href="mision.html" class="active">Misión</a>
+
+            <a
+                href="mision.html"
+                class="active"
+            >
+                Misión
+            </a>
+
             <a href="vision.html">Visión</a>
             <a href="contacto.html">Contacto</a>
+            <a href="juegos.html">Juegos</a>
 
-            <a href="portal/portal-paciente.html" class="nav-portal">
+            <a
+                href="portal/portal-paciente.html"
+                class="nav-portal"
+            >
                 Portal del paciente
             </a>
 
         </nav>
 
-        <button class="menu-button" id="menuButton" type="button">
+
+        <button
+            class="menu-button"
+            id="menuToggle"
+            type="button"
+        >
             <span></span>
             <span></span>
             <span></span>
         </button>
 
     </div>
+
 
     <div class="mobile-nav" id="mobileNav">
 
@@ -63,8 +86,8 @@
         <a href="mision.html">Misión</a>
         <a href="vision.html">Visión</a>
         <a href="contacto.html">Contacto</a>
-
-        <a href="portal/portal-paciente.html" class="mobile-portal">
+        <a href="juegos.html">Juegos</a>
+        <a href="portal/portal-paciente.html">
             Portal del paciente
         </a>
 
@@ -75,17 +98,14 @@
 
 <main>
 
-    <section class="why-section" style="min-height: 620px;">
+    <section class="why-section">
 
         <div class="why-image">
 
-            <div class="image-decoration"></div>
-
-            <div class="image-content">
-                <span>◎</span>
-                <strong>Nuestra misión</strong>
-                <small>Compromiso y cuidado</small>
-            </div>
+            <img
+                src="img/hero.jpg"
+                alt="Centro de Salud San Juan de Dios"
+            >
 
         </div>
 
@@ -93,53 +113,64 @@
         <div class="why-content">
 
             <span class="eyebrow">
-                QUIÉNES SOMOS
+                NUESTRA MISIÓN
             </span>
 
-            <h1>
-                Nuestra misión
-            </h1>
+            <h2>
+                Cuidar con compromiso
+                y cercanía.
+            </h2>
 
             <p>
-                Brindar una atención de salud cercana, profesional
-                y respetuosa, colocando a las personas y su bienestar
-                en el centro de nuestro trabajo.
-            </p>
-
-            <p>
-                Buscamos ofrecer información clara, orientación
-                adecuada y una experiencia de atención que genere
-                confianza en nuestros pacientes y sus familias.
+                Nuestra misión es brindar una atención
+                de salud profesional, humana y cercana,
+                procurando que cada paciente reciba
+                orientación clara y un trato respetuoso.
             </p>
 
             <div class="why-list">
 
                 <div class="why-item">
                     <span>✓</span>
+
                     <div>
-                        <strong>Atención humana</strong>
+                        <strong>
+                            Atención humana
+                        </strong>
+
                         <p>
-                            Tratamos a cada persona con respeto y cercanía.
+                            Escuchar y comprender las necesidades
+                            de cada paciente.
                         </p>
                     </div>
                 </div>
 
+
                 <div class="why-item">
                     <span>✓</span>
+
                     <div>
-                        <strong>Compromiso</strong>
+                        <strong>
+                            Profesionalismo
+                        </strong>
+
                         <p>
-                            Trabajamos pensando en el bienestar del paciente.
+                            Trabajar con responsabilidad y compromiso.
                         </p>
                     </div>
                 </div>
 
+
                 <div class="why-item">
                     <span>✓</span>
+
                     <div>
-                        <strong>Orientación</strong>
+                        <strong>
+                            Servicio a la comunidad
+                        </strong>
+
                         <p>
-                            Facilitamos información comprensible y útil.
+                            Contribuir al bienestar de las personas.
                         </p>
                     </div>
                 </div>
@@ -155,67 +186,14 @@
 
 <footer class="site-footer">
 
-    <div class="footer-main">
-
-        <div class="footer-brand">
-
-            <a href="index.html" class="brand footer-logo">
-
-                <div class="brand-icon">
-                    <span>✚</span>
-                </div>
-
-                <div class="brand-text">
-                    <strong>San Juan de Dios</strong>
-                    <small>Centro de Salud</small>
-                </div>
-
-            </a>
-
-            <p>
-                Atención cercana, profesional y pensada
-                para el bienestar de nuestros pacientes.
-            </p>
-
-        </div>
-
-
-        <div class="footer-column">
-
-            <h3>Navegación</h3>
-
-            <a href="index.html">Inicio</a>
-            <a href="especialidades.html">Especialidades</a>
-            <a href="mision.html">Misión</a>
-            <a href="vision.html">Visión</a>
-
-        </div>
-
-
-        <div class="footer-column">
-
-            <h3>Información</h3>
-
-            <a href="contacto.html">Contacto</a>
-            <a href="juegos.html">Juegos</a>
-            <a href="portal/portal-paciente.html">
-                Portal del paciente
-            </a>
-
-        </div>
-
-    </div>
-
-
     <div class="footer-bottom">
 
-        <p>
+        <span>
             © 2026 Centro de Salud San Juan de Dios.
-            Todos los derechos reservados.
-        </p>
+        </span>
 
         <span>
-            Hecho con dedicación para nuestros pacientes.
+            Atención con dedicación y compromiso.
         </span>
 
     </div>
@@ -223,7 +201,7 @@
 </footer>
 
 
-<script src="script.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

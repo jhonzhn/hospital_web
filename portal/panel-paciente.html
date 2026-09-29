@@ -10,587 +10,352 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Mi atención | Portal del Paciente
-    </title>
-
-    <link
-        rel="stylesheet"
-        href="../css/style.css"
-    >
+    <title>Mi atención | San Juan de Dios</title>
 
     <link
         rel="stylesheet"
         href="../css/portal.css"
     >
 
-    <link
-        rel="stylesheet"
-        href="../css/responsive.css"
-    >
+    <style>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+        .portal-panel {
+            width: min(900px, calc(100% - 30px));
+            margin: auto;
+            padding: 45px 0 80px;
+        }
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+        .portal-welcome {
+            margin-bottom: 25px;
+        }
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+        .portal-welcome span {
+            color: var(--portal-primary);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.3px;
+        }
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+        .portal-welcome h1 {
+            margin: 7px 0;
+            color: var(--portal-dark);
+            font-size: 30px;
+        }
+
+        .portal-welcome p {
+            color: var(--portal-muted);
+            font-size: 12px;
+        }
+
+        .appointment-card {
+            padding: 28px;
+            background: white;
+            border: 1px solid var(--portal-border);
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(23,49,58,.08);
+        }
+
+        .appointment-label {
+            color: var(--portal-primary);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+        }
+
+        .appointment-card h2 {
+            margin: 8px 0 20px;
+            color: var(--portal-dark);
+            font-family: var(--portal-title);
+            font-size: 24px;
+        }
+
+        .appointment-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .appointment-item {
+            padding: 16px;
+            background: #f7fafb;
+            border-radius: 12px;
+        }
+
+        .appointment-item span,
+        .appointment-item strong {
+            display: block;
+        }
+
+        .appointment-item span {
+            margin-bottom: 5px;
+            color: var(--portal-muted);
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .appointment-item strong {
+            color: var(--portal-dark);
+            font-size: 13px;
+        }
+
+        .portal-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .portal-action {
+            padding: 11px 15px;
+            color: var(--portal-primary);
+            background: var(--portal-light);
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .portal-action.logout {
+            color: #a23a31;
+            background: #fff0ee;
+            border: 0;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+
+            .appointment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portal-panel {
+                padding-top: 30px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
-
-<body class="portal-dashboard">
-
+<body class="portal-body">
 
 <header class="portal-header">
 
-    <div class="portal-header-left">
+    <a
+        href="../index.html"
+        class="portal-brand"
+    >
 
-        <a
-            href="panel-paciente.html"
-            class="portal-logo"
-        >
+        <div class="portal-logo">
+            ✚
+        </div>
 
-            <div class="portal-logo-icon">
+        <div>
+            <strong>
+                San Juan de Dios
+            </strong>
 
-                <i class="fa-solid fa-heart-pulse"></i>
+            <span>
+                Portal del paciente
+            </span>
+        </div>
 
-            </div>
-
-            <div>
-
-                <strong>
-                    San Juan de Dios
-                </strong>
-
-                <span>
-                    Portal del Paciente
-                </span>
-
-            </div>
-
-        </a>
-
-    </div>
+    </a>
 
 
-    <div class="portal-header-right">
-
-        <span class="portal-user-name">
-            Paciente
-        </span>
-
-
-        <button
-            type="button"
-            id="logoutBtn"
-            class="portal-logout-btn"
-        >
-
-            <i class="fa-solid fa-right-from-bracket"></i>
-
-            Salir
-
-        </button>
-
-    </div>
+    <button
+        class="portal-back logout"
+        id="logoutButton"
+        type="button"
+    >
+        Cerrar sesión
+    </button>
 
 </header>
 
 
+<main class="portal-panel">
 
-<div class="portal-dashboard-layout">
+    <section class="portal-welcome">
 
+        <span>
+            INFORMACIÓN DE ATENCIÓN
+        </span>
 
-<aside class="portal-dashboard-sidebar">
+        <h1>
+            Tu próxima atención
+        </h1>
 
+        <p>
+            Aquí encontrarás solamente los datos necesarios
+            para acudir a tu cita.
+        </p>
 
-    <div class="portal-sidebar-title">
-        MI PORTAL
-    </div>
-
-
-    <nav class="portal-dashboard-nav">
-
-
-        <a
-            href="panel-paciente.html"
-            class="active"
-        >
-
-            <i class="fa-solid fa-house"></i>
-
-            Mi atención
-
-        </a>
+    </section>
 
 
-        <a href="especialidades.html">
+    <section class="appointment-card">
 
-            <i class="fa-solid fa-hospital"></i>
+        <span class="appointment-label">
+            CITA PROGRAMADA
+        </span>
 
-            Especialidades
-
-        </a>
-
-
-        <a href="../index.html">
-
-            <i class="fa-solid fa-globe"></i>
-
-            Sitio web
-
-        </a>
+        <h2 id="specialty">
+            Medicina General
+        </h2>
 
 
-    </nav>
+        <div class="appointment-grid">
 
-
-</aside>
-
-
-
-<main class="portal-dashboard-main">
-
-
-    <div class="portal-dashboard-heading">
-
-        <div>
-
-            <span>
-                PORTAL DEL PACIENTE
-            </span>
-
-            <h1>
-                Mi atención
-            </h1>
-
-            <p>
-                Consulta la información necesaria
-                para tu próxima atención.
-            </p>
-
-        </div>
-
-
-        <div class="portal-dashboard-date">
-
-            <i class="fa-regular fa-calendar"></i>
-
-            <span id="portalCurrentDate">
-                2026
-            </span>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- RESUMEN -->
-
-    <section class="portal-attention-grid">
-
-
-        <article class="portal-attention-card">
-
-            <div class="portal-attention-icon">
-
-                <i class="fa-solid fa-user-doctor"></i>
-
-            </div>
-
-            <div>
+            <div class="appointment-item">
 
                 <span>
-                    PROFESIONAL
+                    MÉDICO
                 </span>
 
-                <strong id="patientDoctor">
+                <strong id="doctor">
                     Dr. Carlos Pérez
                 </strong>
 
             </div>
 
-        </article>
 
-
-        <article class="portal-attention-card">
-
-            <div class="portal-attention-icon">
-
-                <i class="fa-solid fa-hospital"></i>
-
-            </div>
-
-            <div>
-
-                <span>
-                    ESPECIALIDAD
-                </span>
-
-                <strong id="patientSpecialty">
-                    Medicina General
-                </strong>
-
-            </div>
-
-        </article>
-
-
-        <article class="portal-attention-card">
-
-            <div class="portal-attention-icon">
-
-                <i class="fa-regular fa-calendar"></i>
-
-            </div>
-
-            <div>
+            <div class="appointment-item">
 
                 <span>
                     FECHA
                 </span>
 
-                <strong id="patientDate">
+                <strong id="date">
                     30/09/2026
                 </strong>
 
             </div>
 
-        </article>
 
-
-        <article class="portal-attention-card">
-
-            <div class="portal-attention-icon">
-
-                <i class="fa-regular fa-clock"></i>
-
-            </div>
-
-            <div>
+            <div class="appointment-item">
 
                 <span>
                     HORA
                 </span>
 
-                <strong id="patientTime">
+                <strong id="time">
                     09:00 a. m.
                 </strong>
 
             </div>
 
-        </article>
 
-
-    </section>
-
-
-
-    <!-- CITA -->
-
-    <section class="portal-dashboard-section">
-
-        <div class="portal-section-heading">
-
-            <div>
+            <div class="appointment-item">
 
                 <span>
-                    INFORMACIÓN
+                    UBICACIÓN
                 </span>
 
-                <h2>
-                    Tu atención programada
-                </h2>
-
-            </div>
-
-
-            <span class="portal-status">
-                Programada
-            </span>
-
-        </div>
-
-
-        <div class="portal-appointment">
-
-
-            <div class="portal-appointment-date">
-
-                <span>
-                    SEP
-                </span>
-
-                <strong id="appointmentDay">
-                    30
+                <strong id="location">
+                    Puerta 3
                 </strong>
 
             </div>
 
-
-            <div class="portal-appointment-info">
-
-                <span>
-                    ESPECIALIDAD
-                </span>
-
-                <h3 id="appointmentSpecialty">
-                    Medicina General
-                </h3>
-
-                <p id="appointmentDoctor">
-                    <i class="fa-solid fa-user-doctor"></i>
-                    Dr. Carlos Pérez
-                </p>
-
-
-                <div class="portal-appointment-details">
-
-                    <span>
-
-                        <i class="fa-regular fa-clock"></i>
-
-                        <strong id="appointmentTime">
-                            09:00 a. m.
-                        </strong>
-
-                    </span>
-
-
-                    <span>
-
-                        <i class="fa-solid fa-door-open"></i>
-
-                        <strong id="appointmentLocation">
-                            Puerta 3
-                        </strong>
-
-                    </span>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-
-    <!-- RECOMENDACIONES -->
-
-    <section class="portal-dashboard-section">
-
-        <div class="portal-section-heading">
-
-            <div>
-
-                <span>
-                    ANTES DE TU ATENCIÓN
-                </span>
-
-                <h2>
-                    Recomendaciones
-                </h2>
-
-            </div>
-
         </div>
 
 
-        <div class="portal-recommendations">
-
-
-            <article>
-
-                <i class="fa-regular fa-clock"></i>
-
-                <h3>
-                    Llega con anticipación
-                </h3>
-
-                <p>
-                    Procura llegar unos minutos
-                    antes de tu hora de atención.
-                </p>
-
-            </article>
-
-
-            <article>
-
-                <i class="fa-regular fa-id-card"></i>
-
-                <h3>
-                    Lleva tu DNI
-                </h3>
-
-                <p>
-                    Presenta tu documento de identidad
-                    al llegar al establecimiento.
-                </p>
-
-            </article>
-
-
-            <article>
-
-                <i class="fa-solid fa-door-open"></i>
-
-                <h3>
-                    Revisa la puerta
-                </h3>
-
-                <p>
-                    Consulta la puerta indicada
-                    para tu atención.
-                </p>
-
-            </article>
-
-
-        </div>
-
-    </section>
-
-
-
-    <!-- ESPECIALIDADES DEL PORTAL -->
-
-    <section class="portal-dashboard-section">
-
-        <div class="portal-section-heading">
-
-            <div>
-
-                <span>
-                    INFORMACIÓN
-                </span>
-
-                <h2>
-                    Especialidades
-                </h2>
-
-            </div>
-
+        <div class="portal-actions">
 
             <a
                 href="especialidades.html"
-                class="portal-view-link"
+                class="portal-action"
             >
-
-                Ver todas
-
-                <i class="fa-solid fa-arrow-right"></i>
-
+                Ver especialidades
             </a>
 
-        </div>
-
-
-        <div class="portal-mini-specialties">
-
-
-            <a
-                href="especialidades.html#cardiologia"
-                class="portal-mini-specialty"
+            <button
+                id="logoutButtonBottom"
+                class="portal-action logout"
+                type="button"
             >
-
-                <i class="fa-solid fa-heart-pulse"></i>
-
-                <span>
-                    Cardiología
-                </span>
-
-            </a>
-
-
-            <a
-                href="especialidades.html#odontologia"
-                class="portal-mini-specialty"
-            >
-
-                <i class="fa-solid fa-tooth"></i>
-
-                <span>
-                    Odontología
-                </span>
-
-            </a>
-
-
-            <a
-                href="especialidades.html#pediatria"
-                class="portal-mini-specialty"
-            >
-
-                <i class="fa-solid fa-child"></i>
-
-                <span>
-                    Pediatría
-                </span>
-
-            </a>
-
-
-            <a
-                href="especialidades.html#psicologia"
-                class="portal-mini-specialty"
-            >
-
-                <i class="fa-solid fa-brain"></i>
-
-                <span>
-                    Psicología
-                </span>
-
-            </a>
-
-
-            <a
-                href="especialidades.html#nutricion"
-                class="portal-mini-specialty"
-            >
-
-                <i class="fa-solid fa-apple-whole"></i>
-
-                <span>
-                    Nutrición
-                </span>
-
-            </a>
-
+                Cerrar sesión
+            </button>
 
         </div>
 
     </section>
 
-
 </main>
 
-</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const data =
+        sessionStorage.getItem("sjdd_patient");
+
+    if (!data) {
+
+        window.location.href =
+            "portal-paciente.html";
+
+        return;
+    }
 
 
+    const patient =
+        JSON.parse(data);
 
-<script src="../js/portal.js"></script>
+
+    document.getElementById("specialty")
+        .textContent =
+        patient.cita.especialidad;
+
+    document.getElementById("doctor")
+        .textContent =
+        patient.cita.medico;
+
+    document.getElementById("date")
+        .textContent =
+        patient.cita.fecha;
+
+    document.getElementById("time")
+        .textContent =
+        patient.cita.hora;
+
+    document.getElementById("location")
+        .textContent =
+        patient.cita.ubicacion;
+
+
+    function logout() {
+
+        sessionStorage.removeItem(
+            "sjdd_patient"
+        );
+
+        window.location.href =
+            "portal-paciente.html";
+
+    }
+
+
+    document
+        .getElementById("logoutButton")
+        .addEventListener(
+            "click",
+            logout
+        );
+
+
+    document
+        .getElementById("logoutButtonBottom")
+        .addEventListener(
+            "click",
+            logout
+        );
+
+});
+
+</script>
 
 </body>
-
 </html>

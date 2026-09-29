@@ -1,38 +1,23 @@
-/* =========================================================
-   CENTRO DE SALUD SAN JUAN DE DIOS
-   JAVASCRIPT PRINCIPAL
-========================================================= */
-
 document.addEventListener("DOMContentLoaded", () => {
-
-    /* =====================================================
-       ELEMENTOS
-    ====================================================== */
 
     const header = document.getElementById("siteHeader");
     const menuToggle = document.getElementById("menuToggle");
     const mainNav = document.getElementById("mainNav");
+    const mobileNav = document.getElementById("mobileNav");
     const backToTop = document.getElementById("backToTop");
 
 
-    /* =====================================================
-       HEADER AL HACER SCROLL
-    ====================================================== */
+    /* HEADER */
 
     function updateHeader() {
 
         if (!header) return;
 
-        if (window.scrollY > 30) {
-
+        if (window.scrollY > 20) {
             header.classList.add("scrolled");
-
         } else {
-
             header.classList.remove("scrolled");
-
         }
-
     }
 
     window.addEventListener(
@@ -44,112 +29,86 @@ document.addEventListener("DOMContentLoaded", () => {
     updateHeader();
 
 
+    /* MENÚ MÓVIL */
 
-    /* =====================================================
-       MENÚ MÓVIL
-    ====================================================== */
-
-    if (menuToggle && mainNav) {
+    if (menuToggle && mobileNav) {
 
         menuToggle.addEventListener("click", () => {
 
-            mainNav.classList.toggle("mobile-open");
+            const isOpen =
+                mobileNav.classList.toggle("open");
 
-            document.body.classList.toggle(
-                "menu-open"
+            menuToggle.setAttribute(
+                "aria-expanded",
+                isOpen ? "true" : "false"
             );
 
-
-            const icon =
-                menuToggle.querySelector("i");
-
-            if (
-                mainNav.classList.contains(
-                    "mobile-open"
-                )
-            ) {
-
-                icon.classList.remove(
-                    "fa-bars"
-                );
-
-                icon.classList.add(
-                    "fa-xmark"
-                );
-
-            } else {
-
-                icon.classList.remove(
-                    "fa-xmark"
-                );
-
-                icon.classList.add(
-                    "fa-bars"
-                );
-
-            }
+            document.body.classList.toggle(
+                "menu-open",
+                isOpen
+            );
 
         });
 
 
-        /* Cerrar menú al seleccionar una página */
+        mobileNav.querySelectorAll("a").forEach(link => {
 
-        const navLinks =
-            mainNav.querySelectorAll("a");
+            link.addEventListener("click", () => {
 
-        navLinks.forEach(link => {
+                mobileNav.classList.remove("open");
 
-            link.addEventListener(
-                "click",
-                () => {
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
 
-                    mainNav.classList.remove(
-                        "mobile-open"
-                    );
+                document.body.classList.remove(
+                    "menu-open"
+                );
 
-                    document.body.classList.remove(
-                        "menu-open"
-                    );
-
-
-                    const icon =
-                        menuToggle.querySelector("i");
-
-                    icon.classList.remove(
-                        "fa-xmark"
-                    );
-
-                    icon.classList.add(
-                        "fa-bars"
-                    );
-
-                }
-            );
+            });
 
         });
 
     }
 
 
+    /* CERRAR MENÚ AL CAMBIAR A ESCRITORIO */
 
-    /* =====================================================
-       BOTÓN VOLVER ARRIBA
-    ====================================================== */
+    window.addEventListener("resize", () => {
+
+        if (window.innerWidth > 850) {
+
+            if (mobileNav) {
+                mobileNav.classList.remove("open");
+            }
+
+            if (menuToggle) {
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            }
+
+            document.body.classList.remove(
+                "menu-open"
+            );
+        }
+
+    });
+
+
+    /* VOLVER ARRIBA */
 
     function updateBackToTop() {
 
         if (!backToTop) return;
 
         if (window.scrollY > 500) {
-
             backToTop.classList.add("show");
-
         } else {
-
             backToTop.classList.remove("show");
-
         }
-
     }
 
     window.addEventListener(
@@ -163,316 +122,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (backToTop) {
 
-        backToTop.addEventListener(
-            "click",
-            () => {
+        backToTop.addEventListener("click", () => {
 
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
 
-            }
-        );
+        });
 
     }
 
 
+    /* ANIMACIONES */
 
-    /* =====================================================
-       ANIMACIONES AL HACER SCROLL
-    ====================================================== */
-
-    const elementsToReveal = document.querySelectorAll(
-        ".specialty-card, " +
-        ".service-card, " +
-        ".support-feature, " +
-        ".promotion-card, " +
-        ".notice-card, " +
-        ".portal-banner-inner, " +
-        ".community-content, " +
-        ".contact-preview-inner"
-    );
-
-
-    elementsToReveal.forEach(element => {
-
-        element.classList.add("reveal");
-
-    });
-
-
-    const observer =
-        new IntersectionObserver(
-            entries => {
-
-                entries.forEach(entry => {
-
-                    if (entry.isIntersecting) {
-
-                        entry.target.classList.add(
-                            "visible"
-                        );
-
-                        observer.unobserve(
-                            entry.target
-                        );
-
-                    }
-
-                });
-
-            },
-            {
-                threshold: 0.12
-            }
+    const elements =
+        document.querySelectorAll(
+            ".intro-card, " +
+            ".specialty-preview, " +
+            ".value-card, " +
+            ".why-item"
         );
 
 
-    elementsToReveal.forEach(element => {
+    if ("IntersectionObserver" in window) {
 
-        observer.observe(element);
+        const observer =
+            new IntersectionObserver(
+                entries => {
 
-    });
+                    entries.forEach(entry => {
 
+                        if (entry.isIntersecting) {
 
+                            entry.target.classList.add(
+                                "visible"
+                            );
 
-    /* =====================================================
-       EFECTO DE MOVIMIENTO SUAVE EN TARJETAS
-    ====================================================== */
+                            observer.unobserve(
+                                entry.target
+                            );
 
-    const cards = document.querySelectorAll(
-        ".specialty-card, .service-card"
-    );
+                        }
 
-
-    cards.forEach(card => {
-
-        card.addEventListener(
-            "mousemove",
-            event => {
-
-                if (
-                    window.innerWidth < 900
-                ) return;
-
-
-                const rect =
-                    card.getBoundingClientRect();
-
-                const x =
-                    event.clientX - rect.left;
-
-                const y =
-                    event.clientY - rect.top;
-
-                const centerX =
-                    rect.width / 2;
-
-                const centerY =
-                    rect.height / 2;
-
-                const rotateX =
-                    ((y - centerY) /
-                        centerY) * -2;
-
-                const rotateY =
-                    ((x - centerX) /
-                        centerX) * 2;
-
-
-                card.style.transform =
-                    `perspective(700px)
-                     rotateX(${rotateX}deg)
-                     rotateY(${rotateY}deg)
-                     translateY(-5px)`;
-
-            }
-        );
-
-
-        card.addEventListener(
-            "mouseleave",
-            () => {
-
-                card.style.transform = "";
-
-            }
-        );
-
-    });
-
-
-
-    /* =====================================================
-       FECHA ACTUAL
-    ====================================================== */
-
-    const currentYear =
-        document.querySelector(
-            "[data-current-year]"
-        );
-
-    if (currentYear) {
-
-        currentYear.textContent =
-            new Date().getFullYear();
-
-    }
-
-
-
-    /* =====================================================
-       ANIMACIÓN DE ENTRADA DEL HERO
-    ====================================================== */
-
-    const heroContent =
-        document.querySelector(".hero-content");
-
-    const heroVisual =
-        document.querySelector(".hero-visual");
-
-
-    if (heroContent) {
-
-        heroContent.style.opacity = "0";
-        heroContent.style.transform =
-            "translateY(25px)";
-
-        setTimeout(() => {
-
-            heroContent.style.transition =
-                "opacity .8s ease, transform .8s ease";
-
-            heroContent.style.opacity = "1";
-
-            heroContent.style.transform =
-                "translateY(0)";
-
-        }, 100);
-
-    }
-
-
-    if (heroVisual) {
-
-        heroVisual.style.opacity = "0";
-        heroVisual.style.transform =
-            "translateY(30px)";
-
-        setTimeout(() => {
-
-            heroVisual.style.transition =
-                "opacity 1s ease, transform 1s ease";
-
-            heroVisual.style.opacity = "1";
-
-            heroVisual.style.transform =
-                "translateY(0)";
-
-        }, 250);
-
-    }
-
-
-
-    /* =====================================================
-       CERRAR MENÚ AL CAMBIAR A ESCRITORIO
-    ====================================================== */
-
-    window.addEventListener(
-        "resize",
-        () => {
-
-            if (
-                window.innerWidth > 900 &&
-                mainNav
-            ) {
-
-                mainNav.classList.remove(
-                    "mobile-open"
-                );
-
-                document.body.classList.remove(
-                    "menu-open"
-                );
-
-                if (menuToggle) {
-
-                    const icon =
-                        menuToggle.querySelector("i");
-
-                    icon.classList.remove(
-                        "fa-xmark"
-                    );
-
-                    icon.classList.add(
-                        "fa-bars"
-                    );
-
-                }
-
-            }
-
-        }
-    );
-
-
-
-    /* =====================================================
-       ANCLAS SUAVES
-    ====================================================== */
-
-    document
-        .querySelectorAll(
-            'a[href^="#"]'
-        )
-        .forEach(anchor => {
-
-            anchor.addEventListener(
-                "click",
-                event => {
-
-                    const targetId =
-                        anchor.getAttribute(
-                            "href"
-                        );
-
-                    if (
-                        !targetId ||
-                        targetId === "#"
-                    ) return;
-
-
-                    const target =
-                        document.querySelector(
-                            targetId
-                        );
-
-                    if (!target) return;
-
-
-                    event.preventDefault();
-
-
-                    target.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
                     });
 
+                },
+                {
+                    threshold: 0.12
                 }
             );
+
+
+        elements.forEach(element => {
+
+            element.classList.add("reveal");
+
+            observer.observe(element);
+
+        });
+
+    }
+
+
+    /* AÑO */
+
+    document
+        .querySelectorAll("[data-current-year]")
+        .forEach(element => {
+
+            element.textContent =
+                new Date().getFullYear();
 
         });
 
 
-
-    /* =====================================================
-       MENSAJE DE CONSOLA
-    ====================================================== */
-
     console.log(
-        "Centro de Salud San Juan de Dios — Web cargada correctamente."
+        "San Juan de Dios: sitio cargado correctamente."
     );
 
 });

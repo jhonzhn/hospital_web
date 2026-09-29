@@ -1,28 +1,28 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
     const modal =
         document.getElementById("specialtyModal");
 
-    const modalOverlay =
-        document.getElementById("specialtyModalOverlay");
+    const modalClose =
+        document.getElementById("modalClose");
 
-    const closeButton =
-        document.getElementById("specialtyModalClose");
+    const modalTitle =
+        document.getElementById("modalTitle");
 
-    const title =
-        document.getElementById("modalSpecialtyTitle");
+    const modalDescription =
+        document.getElementById("modalDescription");
 
-    const number =
-        document.getElementById("modalSpecialtyNumber");
+    const modalLocation =
+        document.getElementById("modalLocation");
 
-    const description =
-        document.getElementById("modalSpecialtyDescription");
+    const modalVideo =
+        document.getElementById("modalVideo");
 
-    const video =
-        document.getElementById("modalSpecialtyVideo");
-
-    const videoSource =
+    const modalVideoSource =
         document.getElementById("modalVideoSource");
+
+    const videoPlaceholder =
+        document.getElementById("videoPlaceholder");
 
     const photoOne =
         document.getElementById("modalPhotoOne");
@@ -30,280 +30,214 @@ document.addEventListener("DOMContentLoaded", function () {
     const photoTwo =
         document.getElementById("modalPhotoTwo");
 
-    const location =
-        document.getElementById("modalLocation");
-
-
-    let lastOpenedButton = null;
-
 
     const specialties = {
 
         cardiologia: {
-
-            number: "01 · CARDIOLOGÍA",
-
             title: "Cardiología",
-
             description:
-                "Área dedicada a la prevención, evaluación y atención relacionada con el corazón y el sistema circulatorio.",
-
+                "Atención enfocada en la prevención y cuidado de la salud cardiovascular.",
+            location:
+                "Área de Cardiología — consulta en la puerta indicada por recepción.",
             video:
                 "img/especialidades/cardiologia/cardiologia.mp4",
-
             photoOne:
                 "img/especialidades/cardiologia/entrada.jpg",
-
             photoTwo:
-                "img/especialidades/cardiologia/puerta.jpg",
-
-            location:
-                "Puerta 3 · Área de Cardiología"
-
+                "img/especialidades/cardiologia/puerta.jpg"
         },
-
 
         odontologia: {
-
-            number: "02 · ODONTOLOGÍA",
-
             title: "Odontología",
-
             description:
-                "Atención orientada al cuidado, prevención y mantenimiento de la salud bucal.",
-
+                "Cuidado, prevención y orientación para mantener una buena salud bucal.",
+            location:
+                "Área de Odontología — consulta en la puerta indicada por recepción.",
             video:
                 "img/especialidades/odontologia/odontologia.mp4",
-
             photoOne:
                 "img/especialidades/odontologia/entrada.jpg",
-
             photoTwo:
-                "img/especialidades/odontologia/puerta.jpg",
-
-            location:
-                "Puerta 4 · Área de Odontología"
-
+                "img/especialidades/odontologia/puerta.jpg"
         },
-
 
         pediatria: {
-
-            number: "03 · PEDIATRÍA",
-
             title: "Pediatría",
-
             description:
-                "Atención médica orientada a bebés, niños y adolescentes.",
-
+                "Atención médica orientada al cuidado de niños y adolescentes.",
+            location:
+                "Área de Pediatría — consulta en la puerta indicada por recepción.",
             video:
                 "img/especialidades/pediatria/pediatria.mp4",
-
             photoOne:
                 "img/especialidades/pediatria/entrada.jpg",
-
             photoTwo:
-                "img/especialidades/pediatria/puerta.jpg",
-
-            location:
-                "Puerta 5 · Área de Pediatría"
-
+                "img/especialidades/pediatria/puerta.jpg"
         },
-
 
         psicologia: {
-
-            number: "04 · PSICOLOGÍA",
-
             title: "Psicología",
-
             description:
-                "Orientación y acompañamiento relacionado con la salud mental y el bienestar emocional.",
-
+                "Espacio de acompañamiento para el bienestar emocional y psicológico.",
+            location:
+                "Área de Psicología — consulta en la puerta indicada por recepción.",
             video:
                 "img/especialidades/psicologia/psicologia.mp4",
-
             photoOne:
                 "img/especialidades/psicologia/entrada.jpg",
-
             photoTwo:
-                "img/especialidades/psicologia/puerta.jpg",
-
-            location:
-                "Puerta 6 · Área de Psicología"
-
+                "img/especialidades/psicologia/puerta.jpg"
         },
 
-
         nutricion: {
-
-            number: "05 · NUTRICIÓN",
-
             title: "Nutrición",
-
             description:
-                "Orientación para mejorar los hábitos alimenticios y promover una alimentación adecuada.",
-
+                "Orientación para desarrollar hábitos alimenticios saludables.",
+            location:
+                "Área de Nutrición — consulta en la puerta indicada por recepción.",
             video:
                 "img/especialidades/nutricion/nutricion.mp4",
-
             photoOne:
                 "img/especialidades/nutricion/entrada.jpg",
-
             photoTwo:
-                "img/especialidades/nutricion/puerta.jpg",
-
-            location:
-                "Puerta 7 · Área de Nutrición"
-
+                "img/especialidades/nutricion/puerta.jpg"
         }
 
     };
 
 
-    function openModal(type, button) {
+    function openModal(key) {
 
-        const data =
-            specialties[type];
+        const specialty =
+            specialties[key];
 
-        if (!data) {
-            return;
-        }
+        if (!specialty) return;
 
 
-        lastOpenedButton = button;
+        modalTitle.textContent =
+            specialty.title;
+
+        modalDescription.textContent =
+            specialty.description;
+
+        modalLocation.textContent =
+            specialty.location;
 
 
-        number.textContent =
-            data.number;
+        modalVideoSource.src =
+            specialty.video;
 
-        title.textContent =
-            data.title;
+        modalVideo.load();
 
-        description.textContent =
-            data.description;
+        modalVideo.classList.remove(
+            "has-video"
+        );
+
+        videoPlaceholder.style.display =
+            "flex";
 
 
-        videoSource.src =
-            data.video;
+        fetch(specialty.video, {
+            method: "HEAD"
+        })
+        .then(response => {
 
-        video.load();
+            if (response.ok) {
+
+                modalVideo.classList.add(
+                    "has-video"
+                );
+
+                videoPlaceholder.style.display =
+                    "none";
+
+            }
+
+        })
+        .catch(() => {});
 
 
         photoOne.src =
-            data.photoOne;
-
-        photoOne.alt =
-            "Entrada del área de " +
-            data.title;
-
+            specialty.photoOne;
 
         photoTwo.src =
-            data.photoTwo;
-
-        photoTwo.alt =
-            "Área de atención de " +
-            data.title;
+            specialty.photoTwo;
 
 
-        location.textContent =
-            data.location;
-
-
-        modal.classList.add("active");
+        modal.classList.add("open");
 
         modal.setAttribute(
             "aria-hidden",
             "false"
         );
 
+        document.body.style.overflow =
+            "hidden";
 
-        document.body.classList.add(
-            "modal-open"
-        );
-
-
-        closeButton.focus();
+        modalClose.focus();
 
     }
 
 
     function closeModal() {
 
-        modal.classList.remove(
-            "active"
-        );
+        modal.classList.remove("open");
 
         modal.setAttribute(
             "aria-hidden",
             "true"
         );
 
+        document.body.style.overflow =
+            "";
 
-        document.body.classList.remove(
-            "modal-open"
-        );
-
-
-        video.pause();
-
-        video.currentTime = 0;
-
-
-        if (lastOpenedButton) {
-
-            lastOpenedButton.focus();
-
-        }
+        modalVideo.pause();
 
     }
 
 
     document
-        .querySelectorAll(".specialty-open")
-        .forEach(button => {
+        .querySelectorAll(".specialty-card")
+        .forEach(card => {
 
-            button.addEventListener(
+            card.addEventListener("click", () => {
+
+                openModal(
+                    card.dataset.specialty
+                );
+
+            });
+
+        });
+
+
+    modalClose.addEventListener(
+        "click",
+        closeModal
+    );
+
+
+    document
+        .querySelectorAll("[data-close-modal]")
+        .forEach(element => {
+
+            element.addEventListener(
                 "click",
-                function () {
-
-                    const type =
-                        this.dataset.specialty;
-
-                    openModal(
-                        type,
-                        this
-                    );
-
-                }
+                closeModal
             );
 
         });
 
 
-    closeButton.addEventListener(
-        "click",
-        closeModal
-    );
-
-
-    modalOverlay.addEventListener(
-        "click",
-        closeModal
-    );
-
-
     document.addEventListener(
         "keydown",
-        function (event) {
+        event => {
 
             if (
                 event.key === "Escape" &&
-                modal.classList.contains("active")
+                modal.classList.contains("open")
             ) {
-
                 closeModal();
-
             }
 
         }

@@ -1,216 +1,80 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const startMemory =
-        document.getElementById(
-            "startMemoryGame"
+    /* ==============================
+       JUEGO DE MEMORIA
+    ============================== */
+
+    const memoryBoard =
+        document.getElementById("memoryBoard");
+
+    const memoryMoves =
+        document.getElementById("memoryMoves");
+
+    const memoryRestart =
+        document.getElementById("memoryRestart");
+
+
+    const symbols = [
+        "♥", "♥",
+        "★", "★",
+        "●", "●",
+        "◆", "◆",
+        "✚", "✚",
+        "☀", "☀"
+    ];
+
+
+    let firstCard = null;
+    let secondCard = null;
+    let locked = false;
+    let moves = 0;
+
+
+    function shuffle(array) {
+
+        return [...array].sort(
+            () => Math.random() - 0.5
         );
-
-    const startQuiz =
-        document.getElementById(
-            "startQuizGame"
-        );
-
-    const memoryGame =
-        document.getElementById(
-            "memoryGame"
-        );
-
-    const quizGame =
-        document.getElementById(
-            "quizGame"
-        );
-
-    const gameArea =
-        document.getElementById(
-            "gameArea"
-        );
-
-    const gameTitle =
-        document.getElementById(
-            "gameTitle"
-        );
-
-    const closeGame =
-        document.getElementById(
-            "closeGame"
-        );
-
-
-    /* =====================================================
-       MOSTRAR JUEGO
-    ====================================================== */
-
-    function showGame(type) {
-
-        gameArea.scrollIntoView({
-            behavior: "smooth"
-        });
-
-
-        memoryGame.classList.remove(
-            "active"
-        );
-
-        quizGame.classList.remove(
-            "active"
-        );
-
-
-        if (type === "memory") {
-
-            gameTitle.textContent =
-                "Memoria saludable";
-
-            memoryGame.classList.add(
-                "active"
-            );
-
-            startMemoryGame();
-
-        }
-
-
-        if (type === "quiz") {
-
-            gameTitle.textContent =
-                "Quiz de salud";
-
-            quizGame.classList.add(
-                "active"
-            );
-
-            startQuizGame();
-
-        }
 
     }
 
 
-    /* =====================================================
-       CERRAR
-    ====================================================== */
+    function createMemoryGame() {
 
-    closeGame.addEventListener(
-        "click",
-        function () {
-
-            memoryGame.classList.remove(
-                "active"
-            );
-
-            quizGame.classList.remove(
-                "active"
-            );
-
-            gameTitle.textContent =
-                "Selecciona un juego";
-
-        }
-    );
-
-
-    /* =====================================================
-       JUEGO MEMORIA
-    ====================================================== */
-
-    const memoryIcons = [
-        "🍎",
-        "💧",
-        "🥦",
-        "🏃",
-        "😴",
-        "🦷"
-    ];
-
-
-    let memoryCards = [];
-
-    let firstCard = null;
-
-    let secondCard = null;
-
-    let lockBoard = false;
-
-    let matchedPairs = 0;
-
-
-    function startMemoryGame() {
-
-        const board =
-            document.getElementById(
-                "memoryBoard"
-            );
-
-        const message =
-            document.getElementById(
-                "memoryMessage"
-            );
-
-
-        board.innerHTML = "";
-
-        message.textContent = "";
+        memoryBoard.innerHTML = "";
 
         firstCard = null;
-
         secondCard = null;
+        locked = false;
+        moves = 0;
 
-        lockBoard = false;
-
-        matchedPairs = 0;
+        updateMoves();
 
 
-        memoryCards =
-            [
-                ...memoryIcons,
-                ...memoryIcons
-            ]
-            .sort(
-                () => Math.random() - 0.5
+        shuffle(symbols).forEach(symbol => {
+
+            const button =
+                document.createElement("button");
+
+            button.type = "button";
+
+            button.className =
+                "memory-card";
+
+            button.textContent =
+                symbol;
+
+            button.dataset.symbol =
+                symbol;
+
+            button.addEventListener(
+                "click",
+                () => flipCard(button)
             );
 
+            memoryBoard.appendChild(button);
 
-        memoryCards.forEach(
-            (icon, index) => {
-
-                const button =
-                    document.createElement(
-                        "button"
-                    );
-
-                button.type = "button";
-
-                button.className =
-                    "memory-card";
-
-                button.dataset.icon =
-                    icon;
-
-                button.dataset.index =
-                    index;
-
-                button.textContent =
-                    "?";
-
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        flipCard(
-                            button
-                        );
-
-                    }
-                );
-
-
-                board.appendChild(
-                    button
-                );
-
-            }
-        );
+        });
 
     }
 
@@ -218,411 +82,195 @@ document.addEventListener("DOMContentLoaded", function () {
     function flipCard(card) {
 
         if (
-            lockBoard ||
+            locked ||
             card === firstCard ||
-            card.classList.contains(
-                "matched"
-            )
+            card.classList.contains("matched")
         ) {
-
             return;
-
         }
 
 
-        card.classList.add(
-            "flipped"
-        );
-
-        card.textContent =
-            card.dataset.icon;
+        card.classList.add("flipped");
 
 
         if (!firstCard) {
 
-            firstCard =
-                card;
-
+            firstCard = card;
             return;
 
         }
 
 
-        secondCard =
-            card;
+        secondCard = card;
 
+        moves++;
 
-        checkMemoryMatch();
+        updateMoves();
+
+        checkCards();
 
     }
 
 
-    function checkMemoryMatch() {
+    function checkCards() {
 
-        const isMatch =
-            firstCard.dataset.icon ===
-            secondCard.dataset.icon;
-
-
-        if (isMatch) {
-
-            firstCard.classList.add(
-                "matched"
-            );
-
-            secondCard.classList.add(
-                "matched"
-            );
-
-            matchedPairs++;
-
-            resetMemoryCards();
+        const match =
+            firstCard.dataset.symbol ===
+            secondCard.dataset.symbol;
 
 
-            if (
-                matchedPairs ===
-                memoryIcons.length
-            ) {
+        if (match) {
 
-                document.getElementById(
-                    "memoryMessage"
-                ).textContent =
-                    "¡Muy bien! Encontraste todas las parejas.";
+            firstCard.classList.add("matched");
+            secondCard.classList.add("matched");
 
-            }
+            resetSelection();
 
             return;
-
         }
 
 
-        lockBoard = true;
+        locked = true;
 
 
-        setTimeout(
-            function () {
+        setTimeout(() => {
 
-                firstCard.classList.remove(
-                    "flipped"
-                );
+            firstCard.classList.remove("flipped");
+            secondCard.classList.remove("flipped");
 
-                secondCard.classList.remove(
-                    "flipped"
-                );
+            resetSelection();
 
-                firstCard.textContent =
-                    "?";
-
-                secondCard.textContent =
-                    "?";
-
-                resetMemoryCards();
-
-            },
-            800
-        );
+        }, 700);
 
     }
 
 
-    function resetMemoryCards() {
+    function resetSelection() {
 
         firstCard = null;
-
         secondCard = null;
-
-        lockBoard = false;
-
-    }
-
-
-    /* =====================================================
-       QUIZ
-    ====================================================== */
-
-    const questions = [
-
-        {
-
-            question:
-                "¿Cuál de estos hábitos ayuda a mantener una buena salud?",
-
-            options: [
-                "Dormir adecuadamente",
-                "No beber agua",
-                "Evitar toda actividad física",
-                "Comer solo dulces"
-            ],
-
-            answer: 0
-
-        },
-
-
-        {
-
-            question:
-                "¿Qué se recomienda beber durante el día?",
-
-            options: [
-                "Agua",
-                "Solo gaseosa",
-                "Solo bebidas energéticas",
-                "Ningún líquido"
-            ],
-
-            answer: 0
-
-        },
-
-
-        {
-
-            question:
-                "¿Qué ayuda a cuidar los dientes?",
-
-            options: [
-                "Cepillarlos regularmente",
-                "No cepillarlos",
-                "Comer muchos dulces",
-                "No visitar al dentista"
-            ],
-
-            answer: 0
-
-        },
-
-
-        {
-
-            question:
-                "¿Qué actividad ayuda a mantenernos activos?",
-
-            options: [
-                "Caminar",
-                "No movernos",
-                "Dormir todo el día",
-                "Evitar cualquier ejercicio"
-            ],
-
-            answer: 0
-
-        }
-
-    ];
-
-
-    let currentQuestion = 0;
-
-    let score = 0;
-
-
-    function startQuizGame() {
-
-        currentQuestion = 0;
-
-        score = 0;
-
-        renderQuestion();
+        locked = false;
 
     }
 
 
-    function renderQuestion() {
+    function updateMoves() {
 
-        const question =
-            questions[
-                currentQuestion
-            ];
-
-
-        document.getElementById(
-            "quizQuestion"
-        ).textContent =
-            question.question;
-
-
-        document.getElementById(
-            "quizScore"
-        ).textContent =
-            "Puntaje: " + score;
-
-
-        const options =
-            document.getElementById(
-                "quizOptions"
-            );
-
-
-        options.innerHTML = "";
-
-
-        question.options.forEach(
-            (option, index) => {
-
-                const button =
-                    document.createElement(
-                        "button"
-                    );
-
-                button.type =
-                    "button";
-
-                button.className =
-                    "quiz-option";
-
-                button.textContent =
-                    option;
-
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        selectAnswer(
-                            button,
-                            index
-                        );
-
-                    }
-                );
-
-
-                options.appendChild(
-                    button
-                );
-
-            }
-        );
+        memoryMoves.textContent =
+            `${moves} movimiento${moves === 1 ? "" : "s"}`;
 
     }
 
 
-    function selectAnswer(
-        button,
-        selected
-    ) {
-
-        const question =
-            questions[
-                currentQuestion
-            ];
+    memoryRestart.addEventListener(
+        "click",
+        createMemoryGame
+    );
 
 
-        document
-            .querySelectorAll(
-                ".quiz-option"
-            )
-            .forEach(
-                option => {
+    createMemoryGame();
 
-                    option.disabled =
-                        true;
 
-                }
-            );
+    /* ==============================
+       ADIVINA EL NÚMERO
+    ============================== */
+
+    const guessInput =
+        document.getElementById("guessInput");
+
+    const guessButton =
+        document.getElementById("guessButton");
+
+    const guessMessage =
+        document.getElementById("guessMessage");
+
+    const guessRestart =
+        document.getElementById("guessRestart");
+
+
+    let secretNumber =
+        Math.floor(Math.random() * 20) + 1;
+
+
+    function resetGuessGame() {
+
+        secretNumber =
+            Math.floor(Math.random() * 20) + 1;
+
+        guessInput.value = "";
+
+        guessMessage.textContent =
+            "¡Inténtalo!";
+
+        guessInput.focus();
+
+    }
+
+
+    function checkGuess() {
+
+        const number =
+            Number(guessInput.value);
 
 
         if (
-            selected ===
-            question.answer
+            !number ||
+            number < 1 ||
+            number > 20
         ) {
 
-            button.classList.add(
-                "correct"
-            );
+            guessMessage.textContent =
+                "Escribe un número del 1 al 20.";
 
-            score++;
-
-        } else {
-
-            button.classList.add(
-                "incorrect"
-            );
-
-
-            document
-                .querySelectorAll(
-                    ".quiz-option"
-                )[
-                    question.answer
-                ]
-                .classList.add(
-                    "correct"
-                );
-
+            return;
         }
 
 
-        document.getElementById(
-            "quizScore"
-        ).textContent =
-            "Puntaje: " + score;
+        if (number === secretNumber) {
+
+            guessMessage.textContent =
+                "🎉 ¡Correcto! ¡Lo encontraste!";
+
+            return;
+        }
+
+
+        if (number < secretNumber) {
+
+            guessMessage.textContent =
+                "El número es mayor.";
+
+        } else {
+
+            guessMessage.textContent =
+                "El número es menor.";
+
+        }
 
     }
 
 
-    document
-        .getElementById(
-            "nextQuestion"
-        )
-        .addEventListener(
-            "click",
-            function () {
-
-                currentQuestion++;
-
-
-                if (
-                    currentQuestion >=
-                    questions.length
-                ) {
-
-                    document.getElementById(
-                        "quizQuestion"
-                    ).textContent =
-                        "¡Terminaste el quiz!";
-
-                    document.getElementById(
-                        "quizOptions"
-                    ).innerHTML = `
-                        <p class="game-message">
-                            Obtuviste ${score}
-                            de ${questions.length}
-                            respuestas correctas.
-                        </p>
-                    `;
-
-                    currentQuestion = 0;
-
-                    return;
-
-                }
-
-
-                renderQuestion();
-
-            }
-        );
-
-
-    startMemory.addEventListener(
+    guessButton.addEventListener(
         "click",
-        function () {
+        checkGuess
+    );
 
-            showGame("memory");
+
+    guessInput.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key === "Enter") {
+                checkGuess();
+            }
 
         }
     );
 
 
-    startQuiz.addEventListener(
+    guessRestart.addEventListener(
         "click",
-        function () {
-
-            showGame("quiz");
-
-        }
+        resetGuessGame
     );
 
 });

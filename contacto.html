@@ -4,71 +4,92 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Contacto | Centro de Salud San Juan de Dios</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Contacto | San Juan de Dios</title>
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
 </head>
 
 <body>
 
+<header class="site-header" id="siteHeader">
 
-<header class="main-header">
+    <div class="header-inner">
 
-    <div class="container header-container">
+        <a href="index.html" class="brand">
 
-        <a href="index.html" class="logo">
+            <div class="brand-icon">✚</div>
 
-            <div class="logo-icon">
-                <i class="fa-solid fa-heart-pulse"></i>
-            </div>
-
-            <div class="logo-text">
+            <div class="brand-text">
                 <strong>San Juan de Dios</strong>
-                <span>Centro de Salud</span>
+                <small>Centro de Salud</small>
             </div>
 
         </a>
 
-        <button class="menu-toggle" id="menuToggle">
-
-            <i class="fa-solid fa-bars"></i>
-
-        </button>
 
         <nav class="main-nav" id="mainNav">
 
             <a href="index.html">Inicio</a>
-            <a href="nosotros.html">Nosotros</a>
             <a href="especialidades.html">Especialidades</a>
-            <a href="especialistas.html">Especialistas</a>
-            <a href="servicios.html">Servicios</a>
-            <a href="promociones.html">Promociones</a>
-            <a href="contacto.html" class="active">
+            <a href="mision.html">Misión</a>
+            <a href="vision.html">Visión</a>
+
+            <a
+                href="contacto.html"
+                class="active"
+            >
                 Contacto
             </a>
 
-            <a href="portal/portal-paciente.html"
-               class="nav-portal">
+            <a href="juegos.html">Juegos</a>
 
-                <i class="fa-solid fa-user"></i>
-                Portal del Paciente
-
+            <a
+                href="portal/portal-paciente.html"
+                class="nav-portal"
+            >
+                Portal del paciente
             </a>
 
         </nav>
+
+
+        <button
+            class="menu-button"
+            id="menuToggle"
+            type="button"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </div>
+
+
+    <div class="mobile-nav" id="mobileNav">
+
+        <a href="index.html">Inicio</a>
+        <a href="especialidades.html">Especialidades</a>
+        <a href="mision.html">Misión</a>
+        <a href="vision.html">Visión</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="juegos.html">Juegos</a>
+        <a href="portal/portal-paciente.html">
+            Portal del paciente
+        </a>
 
     </div>
 
@@ -77,315 +98,111 @@
 
 <main>
 
-<section class="page-hero">
+    <section class="specialties-hero">
 
-    <div class="container">
-
-        <span>ESTAMOS PARA AYUDARTE</span>
+        <span class="eyebrow">
+            ESTAMOS PARA AYUDARTE
+        </span>
 
         <h1>
-            Contacto
+            Contáctanos
         </h1>
 
         <p>
-            Encuentra nuestros canales de atención
-            y datos de contacto.
+            Encuentra información básica para comunicarte
+            con el Centro de Salud San Juan de Dios.
         </p>
 
-    </div>
-
-</section>
+    </section>
 
 
-<section class="section">
+    <section class="home-specialties">
 
-    <div class="container contact-page-grid">
+        <div class="intro-cards">
 
+            <article class="intro-card">
 
-        <div class="contact-information">
-
-            <span class="section-label">
-                INFORMACIÓN
-            </span>
-
-            <h2>
-                Ponte en contacto con nosotros.
-            </h2>
-
-            <p>
-                Para consultas generales puedes utilizar
-                los canales de contacto disponibles.
-            </p>
-
-
-            <div class="contact-detail">
-
-                <div class="contact-detail-icon">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
+                <div class="intro-icon">
+                    ☎
                 </div>
 
-                <div>
-
-                    <strong>Dirección</strong>
-
-                    <span>
-                        Av. San Juan de Dios #123
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="contact-detail">
-
-                <div class="contact-detail-icon">
-
-                    <i class="fa-solid fa-phone"></i>
-
-                </div>
-
-                <div>
-
-                    <strong>Teléfono</strong>
-
-                    <span>
-                        (01) 800-4567
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="contact-detail">
-
-                <div class="contact-detail-icon">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                </div>
-
-                <div>
-
-                    <strong>Correo</strong>
-
-                    <span>
-                        contacto@sanjuandedios.pe
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="contact-detail">
-
-                <div class="contact-detail-icon">
-
-                    <i class="fa-solid fa-clock"></i>
-
-                </div>
-
-                <div>
-
-                    <strong>Horario</strong>
-
-                    <span>
-                        Lunes a Domingo
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="contact-form-card">
-
-            <h2>
-                Envíanos un mensaje
-            </h2>
-
-            <p>
-                Completa el formulario para una consulta
-                general de demostración.
-            </p>
-
-
-            <form id="contactForm">
-
-                <div class="form-group">
-
-                    <label for="contactName">
-                        Nombre
-                    </label>
-
-                    <input
-                        type="text"
-                        id="contactName"
-                        placeholder="Tu nombre"
-                        required>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="contactEmail">
-                        Correo electrónico
-                    </label>
-
-                    <input
-                        type="email"
-                        id="contactEmail"
-                        placeholder="correo@ejemplo.com"
-                        required>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="contactSubject">
-                        Asunto
-                    </label>
-
-                    <input
-                        type="text"
-                        id="contactSubject"
-                        placeholder="Motivo de contacto"
-                        required>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="contactMessage">
-                        Mensaje
-                    </label>
-
-                    <textarea
-                        id="contactMessage"
-                        rows="5"
-                        placeholder="Escribe tu mensaje..."
-                        required></textarea>
-
-                </div>
-
-
-                <button type="submit"
-                        class="btn btn-primary contact-submit">
-
-                    Enviar mensaje
-                    <i class="fa-solid fa-paper-plane"></i>
-
-                </button>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section class="section section-light">
-
-    <div class="container">
-
-        <div class="map-placeholder">
-
-            <div>
-
-                <i class="fa-solid fa-map-location-dot"></i>
-
-                <h2>
-                    Ubicación
-                </h2>
+                <h3>
+                    Teléfono
+                </h3>
 
                 <p>
-                    Aquí podremos integrar posteriormente
-                    un mapa interactivo.
+                    Comunícate con recepción para consultas
+                    y orientación general.
                 </p>
 
-            </div>
+                <strong>
+                    Atención telefónica
+                </strong>
+
+            </article>
+
+
+            <article class="intro-card featured">
+
+                <div class="intro-icon">
+                    📍
+                </div>
+
+                <h3>
+                    Ubicación
+                </h3>
+
+                <p>
+                    Visítanos en el Centro de Salud San Juan
+                    de Dios.
+                </p>
+
+                <strong>
+                    Consulta recepción
+                </strong>
+
+            </article>
+
+
+            <article class="intro-card">
+
+                <div class="intro-icon">
+                    ⏰
+                </div>
+
+                <h3>
+                    Horario
+                </h3>
+
+                <p>
+                    Consulta los horarios disponibles
+                    antes de acudir.
+                </p>
+
+                <strong>
+                    Atención al paciente
+                </strong>
+
+            </article>
 
         </div>
 
-    </div>
-
-</section>
+    </section>
 
 </main>
 
 
-<footer class="main-footer">
-
-    <div class="container footer-grid">
-
-        <div class="footer-brand">
-
-            <div class="logo footer-logo">
-
-                <div class="logo-icon">
-                    <i class="fa-solid fa-heart-pulse"></i>
-                </div>
-
-                <div class="logo-text">
-                    <strong>San Juan de Dios</strong>
-                    <span>Centro de Salud</span>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="footer-column">
-
-            <h3>Enlaces</h3>
-
-            <a href="index.html">Inicio</a>
-            <a href="nosotros.html">Nosotros</a>
-            <a href="especialidades.html">Especialidades</a>
-            <a href="servicios.html">Servicios</a>
-
-        </div>
-
-
-        <div class="footer-column">
-
-            <h3>Paciente</h3>
-
-            <a href="portal/portal-paciente.html">
-                Portal del Paciente
-            </a>
-
-            <a href="preguntas-frecuentes.html">
-                Preguntas frecuentes
-            </a>
-
-        </div>
-
-    </div>
-
+<footer class="site-footer">
 
     <div class="footer-bottom">
 
-        <div class="container">
+        <span>
+            © 2026 Centro de Salud San Juan de Dios.
+        </span>
 
-            <p>
-                © 2026 Centro de Salud San Juan de Dios.
-                Proyecto demostrativo.
-            </p>
-
-        </div>
+        <span>
+            Atención con dedicación y compromiso.
+        </span>
 
     </div>
 
