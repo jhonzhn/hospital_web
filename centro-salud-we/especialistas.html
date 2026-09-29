@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Especialistas | Centro de Salud San Juan de Dios</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+
+<header class="main-header">
+
+    <div class="container header-container">
+
+        <a href="index.html" class="logo">
+
+            <div class="logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+
+            <div class="logo-text">
+                <strong>San Juan de Dios</strong>
+                <span>Centro de Salud</span>
+            </div>
+
+        </a>
+
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav class="main-nav" id="mainNav">
+
+            <a href="index.html">Inicio</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="especialidades.html">Especialidades</a>
+            <a href="especialistas.html" class="active">
+                Especialistas
+            </a>
+            <a href="servicios.html">Servicios</a>
+            <a href="promociones.html">Promociones</a>
+            <a href="contacto.html">Contacto</a>
+
+            <a href="portal/portal-paciente.html"
+               class="nav-portal">
+
+                <i class="fa-solid fa-user"></i>
+                Portal del Paciente
+
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="page-hero">
+
+    <div class="container">
+
+        <span>NUESTRO EQUIPO</span>
+
+        <h1>
+            Especialistas
+        </h1>
+
+        <p>
+            Conoce a los profesionales disponibles
+            en nuestras diferentes áreas de atención.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="container">
+
+
+        <div class="filter-bar">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="doctorSearch"
+                    placeholder="Buscar especialista...">
+
+            </div>
+
+
+            <select id="specialtyFilter">
+
+                <option value="all">
+                    Todas las especialidades
+                </option>
+
+                <option value="cardiologia">
+                    Cardiología
+                </option>
+
+                <option value="odontologia">
+                    Odontología
+                </option>
+
+                <option value="pediatria">
+                    Pediatría
+                </option>
+
+                <option value="psicologia">
+                    Psicología
+                </option>
+
+                <option value="nutricion">
+                    Nutrición
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="doctors-grid" id="doctorsGrid">
+
+
+            <article class="doctor-card"
+                     data-name="Carlos Pérez"
+                     data-specialty="cardiologia"
+                     id="cardiologia">
+
+                <div class="doctor-image">
+
+                    <img
+                        src="https://randomuser.me/api/portraits/men/32.jpg"
+                        alt="Dr. Carlos Pérez">
+
+                </div>
+
+                <div class="doctor-info">
+
+                    <span class="doctor-specialty">
+                        Cardiología
+                    </span>
+
+                    <h3>
+                        Dr. Carlos Pérez
+                    </h3>
+
+                    <p>
+                        Atención especializada en cardiología.
+                    </p>
+
+                    <div class="doctor-schedule">
+
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                            Lunes - Viernes
+                        </span>
+
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+                            08:00 - 14:00
+                        </span>
+
+                    </div>
+
+                    <a href="portal/portal-paciente.html"
+                       class="doctor-button">
+
+                        Solicitar cita
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="doctor-card"
+                     data-name="Andrea Torres"
+                     data-specialty="cardiologia">
+
+                <div class="doctor-image">
+
+                    <img
+                        src="https://randomuser.me/api/portraits/women/44.jpg"
+                        alt="Dra. Andrea Torres">
+
+                </div>
+
+                <div class="doctor-info">
+
+                    <span class="doctor-specialty">
+                        Cardiología
+                    </span>
+
+                    <h3>
+                        Dra. Andrea Torres
+                    </h3>
+
+                    <p>
+                        Atención y seguimiento cardiovascular.
+                    </p>
+
+                    <div class="doctor-schedule">
+
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                            Martes - Sábado
+                        </span>
+
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+                            09:00 - 15:00
+                        </span>
+
+                    </div>
+
+                    <a href="portal/portal-paciente.html"
+                       class="doctor-button">
+
+                        Solicitar cita
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="doctor-card"
+                     data-name="Laura Gómez"
+                     data-specialty="odontologia">
+
+                <div class="doctor-image">
+
+                    <img
+                        src="https://randomuser.me/api/portraits/women/65.jpg"
+                        alt="Dra. Laura Gómez">
+
+                </div>
+
+                <div class="doctor-info">
+
+                    <span class="doctor-specialty">
+                        Odontología
+                    </span>
+
+                    <h3>
+                        Dra. Laura Gómez
+                    </h3>
+
+                    <p>
+                        Atención preventiva y salud bucal.
+                    </p>
+
+                    <div class="doctor-schedule">
+
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                            Lunes - Viernes
+                        </span>
+
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+                            08:00 - 13:00
+                        </span>
+
+                    </div>
+
+                    <a href="portal/portal-paciente.html"
+                       class="doctor-button">
+
+                        Solicitar cita
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="doctor-card"
+                     data-name="María Rojas"
+                     data-specialty="pediatria">
+
+                <div class="doctor-image">
+
+                    <img
+                        src="https://randomuser.me/api/portraits/women/68.jpg"
+                        alt="Dra. María Rojas">
+
+                </div>
+
+                <div class="doctor-info">
+
+                    <span class="doctor-specialty">
+                        Pediatría
+                    </span>
+
+                    <h3>
+                        Dra. María Rojas
+                    </h3>
+
+                    <p>
+                        Atención médica para niños y adolescentes.
+                    </p>
+
+                    <div class="doctor-schedule">
+
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                            Lunes - Jueves
+                        </span>
+
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+                            08:00 - 14:00
+                        </span>
+
+                    </div>
+
+                    <a href="portal/portal-paciente.html"
+                       class="doctor-button">
+
+                        Solicitar cita
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="doctor-card"
+                     data-name="Sofía Ramírez"
+                     data-specialty="psicologia"
+                     id="psicologia">
+
+                <div class="doctor-image">
+
+                    <img
+                        src="https://randomuser.me/api/portraits/women/33.jpg"
+                        alt="Dra. Sofía Ramírez">
+
+                </div>
+
+                <div class="doctor-info">
+
+                    <span class="doctor-specialty">
+                        Psicología
+                    </span>
+
+                    <h3>
+                        Dra. Sofía Ramírez
+                    </h3>
+
+                    <p>
+                        Orientación psicológica y bienestar emocional.
+                    </p>
+
+                    <div class="doctor-schedule">
+
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                            Miércoles - Sábado
+                        </span>
+
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+                            09:00 - 16:00
+                        </span>
+
+                    </div>
+
+                    <a href="portal/portal-paciente.html"
+                       class="doctor-button">
+
+                        Solicitar cita
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            <article class="doctor-card"
+                     data-name="Ana Morales"
+                     data-specialty="nutricion"
+                     id="nutricion">
+
+                <div class="doctor-image">
+
+                    <img
+                        src="https://randomuser.me/api/portraits/women/50.jpg"
+                        alt="Lic. Ana Morales">
+
+                </div>
+
+                <div class="doctor-info">
+
+                    <span class="doctor-specialty">
+                        Nutrición
+                    </span>
+
+                    <h3>
+                        Lic. Ana Morales
+                    </h3>
+
+                    <p>
+                        Orientación nutricional y hábitos saludables.
+                    </p>
+
+                    <div class="doctor-schedule">
+
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                            Martes - Viernes
+                        </span>
+
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+                            08:30 - 14:30
+                        </span>
+
+                    </div>
+
+                    <a href="portal/portal-paciente.html"
+                       class="doctor-button">
+
+                        Solicitar cita
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+
+        <div id="noDoctors"
+             class="no-results"
+             style="display:none;">
+
+            <i class="fa-solid fa-user-doctor"></i>
+
+            <h3>
+                No encontramos especialistas
+            </h3>
+
+            <p>
+                Intenta modificar tu búsqueda.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer class="main-footer">
+
+    <div class="container footer-grid">
+
+        <div class="footer-brand">
+
+            <div class="logo footer-logo">
+
+                <div class="logo-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+
+                <div class="logo-text">
+                    <strong>San Juan de Dios</strong>
+                    <span>Centro de Salud</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>Enlaces</h3>
+
+            <a href="index.html">Inicio</a>
+            <a href="nosotros.html">Nosotros</a>
+            <a href="especialidades.html">Especialidades</a>
+            <a href="servicios.html">Servicios</a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>Paciente</h3>
+
+            <a href="portal/portal-paciente.html">
+                Portal del Paciente
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <div class="container">
+
+            <p>
+                © 2026 Centro de Salud San Juan de Dios.
+                Proyecto demostrativo.
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<script src="js/especialistas.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
