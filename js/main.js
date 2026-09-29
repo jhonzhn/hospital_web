@@ -1,13 +1,15 @@
+/* =========================================================
+   SAN JUAN DE DIOS
+   JAVASCRIPT GENERAL
+========================================================= */
+
 document.addEventListener("DOMContentLoaded", () => {
 
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
     const header = document.getElementById("siteHeader");
-    const menuToggle = document.getElementById("menuToggle");
-    const mainNav = document.getElementById("mainNav");
-    const mobileNav = document.getElementById("mobileNav");
-    const backToTop = document.getElementById("backToTop");
-
-
-    /* HEADER */
 
     function updateHeader() {
 
@@ -20,34 +22,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    window.addEventListener(
-        "scroll",
-        updateHeader,
-        { passive: true }
-    );
-
     updateHeader();
 
+    window.addEventListener("scroll", updateHeader, {
+        passive: true
+    });
 
-    /* MENÚ MÓVIL */
+
+    /* =====================================================
+       MENÚ MÓVIL
+    ===================================================== */
+
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileNav = document.getElementById("mobileNav");
 
     if (menuToggle && mobileNav) {
 
         menuToggle.addEventListener("click", () => {
 
-            const isOpen =
-                mobileNav.classList.toggle("open");
+            const isOpen = mobileNav.classList.toggle("open");
 
             menuToggle.setAttribute(
                 "aria-expanded",
                 isOpen ? "true" : "false"
             );
 
-            document.body.classList.toggle(
-                "menu-open",
-                isOpen
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Cerrar menú" : "Abrir menú"
             );
-
         });
 
 
@@ -62,10 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     "false"
                 );
 
-                document.body.classList.remove(
-                    "menu-open"
+                menuToggle.setAttribute(
+                    "aria-label",
+                    "Abrir menú"
                 );
-
             });
 
         });
@@ -73,54 +76,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* CERRAR MENÚ AL CAMBIAR A ESCRITORIO */
+    /* =====================================================
+       AÑO AUTOMÁTICO
+    ===================================================== */
 
-    window.addEventListener("resize", () => {
+    document
+        .querySelectorAll("[data-current-year]")
+        .forEach(element => {
 
-        if (window.innerWidth > 850) {
+            element.textContent = new Date().getFullYear();
 
-            if (mobileNav) {
-                mobileNav.classList.remove("open");
-            }
-
-            if (menuToggle) {
-                menuToggle.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-            }
-
-            document.body.classList.remove(
-                "menu-open"
-            );
-        }
-
-    });
+        });
 
 
-    /* VOLVER ARRIBA */
+    /* =====================================================
+       BACK TO TOP
+    ===================================================== */
 
-    function updateBackToTop() {
-
-        if (!backToTop) return;
-
-        if (window.scrollY > 500) {
-            backToTop.classList.add("show");
-        } else {
-            backToTop.classList.remove("show");
-        }
-    }
-
-    window.addEventListener(
-        "scroll",
-        updateBackToTop,
-        { passive: true }
-    );
-
-    updateBackToTop();
-
+    const backToTop = document.getElementById("backToTop");
 
     if (backToTop) {
+
+        const updateBackToTop = () => {
+
+            if (window.scrollY > 450) {
+                backToTop.classList.add("show");
+            } else {
+                backToTop.classList.remove("show");
+            }
+
+        };
+
+        updateBackToTop();
+
+        window.addEventListener(
+            "scroll",
+            updateBackToTop,
+            { passive: true }
+        );
+
 
         backToTop.addEventListener("click", () => {
 
@@ -134,20 +128,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* ANIMACIONES */
+    /* =====================================================
+       REVEAL AL HACER SCROLL
+    ===================================================== */
 
-    const elements =
-        document.querySelectorAll(
-            ".intro-card, " +
-            ".specialty-preview, " +
-            ".value-card, " +
-            ".why-item"
-        );
+    const revealElements =
+        document.querySelectorAll(".reveal");
 
+    if (revealElements.length) {
 
-    if ("IntersectionObserver" in window) {
-
-        const observer =
+        const revealObserver =
             new IntersectionObserver(
                 entries => {
 
@@ -155,11 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         if (entry.isIntersecting) {
 
-                            entry.target.classList.add(
-                                "visible"
-                            );
+                            entry.target.classList.add("visible");
 
-                            observer.unobserve(
+                            revealObserver.unobserve(
                                 entry.target
                             );
 
@@ -173,32 +161,47 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             );
 
-
-        elements.forEach(element => {
-
-            element.classList.add("reveal");
-
-            observer.observe(element);
-
+        revealElements.forEach(element => {
+            revealObserver.observe(element);
         });
 
     }
 
 
-    /* AÑO */
+    /* =====================================================
+       EFECTO SUAVE EN ENLACES INTERNOS
+    ===================================================== */
 
     document
-        .querySelectorAll("[data-current-year]")
-        .forEach(element => {
+        .querySelectorAll('a[href^="#"]')
+        .forEach(link => {
 
-            element.textContent =
-                new Date().getFullYear();
+            link.addEventListener("click", event => {
+
+                const targetId =
+                    link.getAttribute("href");
+
+                if (
+                    !targetId ||
+                    targetId === "#"
+                ) {
+                    return;
+                }
+
+                const target =
+                    document.querySelector(targetId);
+
+                if (!target) return;
+
+                event.preventDefault();
+
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            });
 
         });
-
-
-    console.log(
-        "San Juan de Dios: sitio cargado correctamente."
-    );
 
 });
