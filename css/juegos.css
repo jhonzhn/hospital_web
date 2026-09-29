@@ -1,0 +1,486 @@
+/* =========================================================
+   JUEGOS
+========================================================= */
+
+.games-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 25px;
+
+}
+
+
+.game-card {
+
+    padding: 30px;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 22px;
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+
+.game-card:hover {
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.game-card-icon {
+
+    width: 60px;
+
+    height: 60px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 17px;
+
+    font-size: 24px;
+
+}
+
+
+.game-card-icon.blue {
+
+    color: var(--primary);
+
+    background: #eaf5fc;
+
+}
+
+
+.game-card-icon.green {
+
+    color: #059669;
+
+    background: #ecfdf5;
+
+}
+
+
+.game-number {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+}
+
+
+.game-card h2 {
+
+    margin-bottom: 10px;
+
+    font-size: 23px;
+
+}
+
+
+.game-card p {
+
+    min-height: 45px;
+
+    margin-bottom: 22px;
+
+    color: var(--text-light);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+}
+
+
+.game-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 43px;
+
+    padding: 0 18px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    color: white;
+
+    background: var(--primary);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+
+}
+
+
+.game-button:hover {
+
+    background: var(--primary-dark);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   ÁREA DEL JUEGO
+========================================================= */
+
+.game-area-card {
+
+    max-width: 850px;
+
+    margin: 0 auto;
+
+    padding: 30px;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: 22px;
+
+}
+
+
+.game-area-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.game-area-header h2 {
+
+    margin-top: 5px;
+
+}
+
+
+.close-game {
+
+    width: 40px;
+
+    height: 40px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    cursor: pointer;
+
+}
+
+
+.game-panel {
+
+    display: none;
+
+}
+
+
+.game-panel.active {
+
+    display: block;
+
+}
+
+
+.game-instruction {
+
+    color: var(--text-light);
+
+    font-size: 13px;
+
+    text-align: center;
+
+}
+
+
+/* =========================================================
+   MEMORIA
+========================================================= */
+
+.memory-board {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            4,
+            1fr
+        );
+
+    gap: 12px;
+
+    max-width: 550px;
+
+    margin: 25px auto;
+
+}
+
+
+.memory-card {
+
+    aspect-ratio: 1;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    color: white;
+
+    background: var(--primary);
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+.memory-card.flipped,
+.memory-card.matched {
+
+    color: var(--text);
+
+    background: #eaf5fc;
+
+}
+
+
+.game-message {
+
+    min-height: 22px;
+
+    color: var(--primary);
+
+    text-align: center;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   QUIZ
+========================================================= */
+
+.quiz-question {
+
+    margin-bottom: 20px;
+
+    font-size: 19px;
+
+    font-weight: 800;
+
+}
+
+
+.quiz-options {
+
+    display: grid;
+
+    gap: 10px;
+
+}
+
+
+.quiz-option {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    background: white;
+
+    color: var(--text);
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+}
+
+
+.quiz-option:hover {
+
+    border-color:
+        var(--primary);
+
+    background:
+        #f3faf9;
+
+}
+
+
+.quiz-option.correct {
+
+    color: #166534;
+
+    border-color: #86efac;
+
+    background: #f0fdf4;
+
+}
+
+
+.quiz-option.incorrect {
+
+    color: #991b1b;
+
+    border-color: #fca5a5;
+
+    background: #fef2f2;
+
+}
+
+
+.quiz-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid var(--border);
+
+}
+
+
+#quizScore {
+
+    color: var(--text-light);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .games-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .memory-board {
+
+        grid-template-columns:
+            repeat(
+                3,
+                1fr
+            );
+
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .game-card,
+    .game-area-card {
+
+        padding: 22px;
+
+    }
+
+
+    .memory-board {
+
+        gap: 8px;
+
+    }
+
+
+    .quiz-footer {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+}

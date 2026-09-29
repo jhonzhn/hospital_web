@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Mi atención | Portal del Paciente
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/portal.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/responsive.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+</head>
+
+
+<body class="portal-dashboard">
+
+
+<header class="portal-header">
+
+    <div class="portal-header-left">
+
+        <a
+            href="panel-paciente.html"
+            class="portal-logo"
+        >
+
+            <div class="portal-logo-icon">
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+            </div>
+
+            <div>
+
+                <strong>
+                    San Juan de Dios
+                </strong>
+
+                <span>
+                    Portal del Paciente
+                </span>
+
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <div class="portal-header-right">
+
+        <span class="portal-user-name">
+            Paciente
+        </span>
+
+
+        <button
+            type="button"
+            id="logoutBtn"
+            class="portal-logout-btn"
+        >
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Salir
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<div class="portal-dashboard-layout">
+
+
+<aside class="portal-dashboard-sidebar">
+
+
+    <div class="portal-sidebar-title">
+        MI PORTAL
+    </div>
+
+
+    <nav class="portal-dashboard-nav">
+
+
+        <a
+            href="panel-paciente.html"
+            class="active"
+        >
+
+            <i class="fa-solid fa-house"></i>
+
+            Mi atención
+
+        </a>
+
+
+        <a href="especialidades.html">
+
+            <i class="fa-solid fa-hospital"></i>
+
+            Especialidades
+
+        </a>
+
+
+        <a href="../index.html">
+
+            <i class="fa-solid fa-globe"></i>
+
+            Sitio web
+
+        </a>
+
+
+    </nav>
+
+
+</aside>
+
+
+
+<main class="portal-dashboard-main">
+
+
+    <div class="portal-dashboard-heading">
+
+        <div>
+
+            <span>
+                PORTAL DEL PACIENTE
+            </span>
+
+            <h1>
+                Mi atención
+            </h1>
+
+            <p>
+                Consulta la información necesaria
+                para tu próxima atención.
+            </p>
+
+        </div>
+
+
+        <div class="portal-dashboard-date">
+
+            <i class="fa-regular fa-calendar"></i>
+
+            <span id="portalCurrentDate">
+                2026
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- RESUMEN -->
+
+    <section class="portal-attention-grid">
+
+
+        <article class="portal-attention-card">
+
+            <div class="portal-attention-icon">
+
+                <i class="fa-solid fa-user-doctor"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    PROFESIONAL
+                </span>
+
+                <strong id="patientDoctor">
+                    Dr. Carlos Pérez
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="portal-attention-card">
+
+            <div class="portal-attention-icon">
+
+                <i class="fa-solid fa-hospital"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    ESPECIALIDAD
+                </span>
+
+                <strong id="patientSpecialty">
+                    Medicina General
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="portal-attention-card">
+
+            <div class="portal-attention-icon">
+
+                <i class="fa-regular fa-calendar"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    FECHA
+                </span>
+
+                <strong id="patientDate">
+                    30/09/2026
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="portal-attention-card">
+
+            <div class="portal-attention-icon">
+
+                <i class="fa-regular fa-clock"></i>
+
+            </div>
+
+            <div>
+
+                <span>
+                    HORA
+                </span>
+
+                <strong id="patientTime">
+                    09:00 a. m.
+                </strong>
+
+            </div>
+
+        </article>
+
+
+    </section>
+
+
+
+    <!-- CITA -->
+
+    <section class="portal-dashboard-section">
+
+        <div class="portal-section-heading">
+
+            <div>
+
+                <span>
+                    INFORMACIÓN
+                </span>
+
+                <h2>
+                    Tu atención programada
+                </h2>
+
+            </div>
+
+
+            <span class="portal-status">
+                Programada
+            </span>
+
+        </div>
+
+
+        <div class="portal-appointment">
+
+
+            <div class="portal-appointment-date">
+
+                <span>
+                    SEP
+                </span>
+
+                <strong id="appointmentDay">
+                    30
+                </strong>
+
+            </div>
+
+
+            <div class="portal-appointment-info">
+
+                <span>
+                    ESPECIALIDAD
+                </span>
+
+                <h3 id="appointmentSpecialty">
+                    Medicina General
+                </h3>
+
+                <p id="appointmentDoctor">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    Dr. Carlos Pérez
+                </p>
+
+
+                <div class="portal-appointment-details">
+
+                    <span>
+
+                        <i class="fa-regular fa-clock"></i>
+
+                        <strong id="appointmentTime">
+                            09:00 a. m.
+                        </strong>
+
+                    </span>
+
+
+                    <span>
+
+                        <i class="fa-solid fa-door-open"></i>
+
+                        <strong id="appointmentLocation">
+                            Puerta 3
+                        </strong>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- RECOMENDACIONES -->
+
+    <section class="portal-dashboard-section">
+
+        <div class="portal-section-heading">
+
+            <div>
+
+                <span>
+                    ANTES DE TU ATENCIÓN
+                </span>
+
+                <h2>
+                    Recomendaciones
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="portal-recommendations">
+
+
+            <article>
+
+                <i class="fa-regular fa-clock"></i>
+
+                <h3>
+                    Llega con anticipación
+                </h3>
+
+                <p>
+                    Procura llegar unos minutos
+                    antes de tu hora de atención.
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <i class="fa-regular fa-id-card"></i>
+
+                <h3>
+                    Lleva tu DNI
+                </h3>
+
+                <p>
+                    Presenta tu documento de identidad
+                    al llegar al establecimiento.
+                </p>
+
+            </article>
+
+
+            <article>
+
+                <i class="fa-solid fa-door-open"></i>
+
+                <h3>
+                    Revisa la puerta
+                </h3>
+
+                <p>
+                    Consulta la puerta indicada
+                    para tu atención.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ESPECIALIDADES DEL PORTAL -->
+
+    <section class="portal-dashboard-section">
+
+        <div class="portal-section-heading">
+
+            <div>
+
+                <span>
+                    INFORMACIÓN
+                </span>
+
+                <h2>
+                    Especialidades
+                </h2>
+
+            </div>
+
+
+            <a
+                href="especialidades.html"
+                class="portal-view-link"
+            >
+
+                Ver todas
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+        <div class="portal-mini-specialties">
+
+
+            <a
+                href="especialidades.html#cardiologia"
+                class="portal-mini-specialty"
+            >
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+                <span>
+                    Cardiología
+                </span>
+
+            </a>
+
+
+            <a
+                href="especialidades.html#odontologia"
+                class="portal-mini-specialty"
+            >
+
+                <i class="fa-solid fa-tooth"></i>
+
+                <span>
+                    Odontología
+                </span>
+
+            </a>
+
+
+            <a
+                href="especialidades.html#pediatria"
+                class="portal-mini-specialty"
+            >
+
+                <i class="fa-solid fa-child"></i>
+
+                <span>
+                    Pediatría
+                </span>
+
+            </a>
+
+
+            <a
+                href="especialidades.html#psicologia"
+                class="portal-mini-specialty"
+            >
+
+                <i class="fa-solid fa-brain"></i>
+
+                <span>
+                    Psicología
+                </span>
+
+            </a>
+
+
+            <a
+                href="especialidades.html#nutricion"
+                class="portal-mini-specialty"
+            >
+
+                <i class="fa-solid fa-apple-whole"></i>
+
+                <span>
+                    Nutrición
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+</div>
+
+
+
+<script src="../js/portal.js"></script>
+
+</body>
+
+</html>

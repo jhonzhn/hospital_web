@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Portal del Paciente | San Juan de Dios
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/portal.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/responsive.css"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+</head>
+
+
+<body class="portal-login-page">
+
+
+<header class="portal-login-header">
+
+    <a
+        href="../index.html"
+        class="portal-logo"
+    >
+
+        <div class="portal-logo-icon">
+
+            <i class="fa-solid fa-heart-pulse"></i>
+
+        </div>
+
+        <div>
+
+            <strong>
+                San Juan de Dios
+            </strong>
+
+            <span>
+                Portal del Paciente
+            </span>
+
+        </div>
+
+    </a>
+
+
+    <a
+        href="../index.html"
+        class="portal-back-link"
+    >
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Sitio web
+
+    </a>
+
+</header>
+
+
+
+<main class="portal-login-main">
+
+    <section class="portal-login-card">
+
+
+        <div class="portal-login-icon">
+
+            <i class="fa-solid fa-user"></i>
+
+        </div>
+
+
+        <span class="portal-login-label">
+            PORTAL DEL PACIENTE
+        </span>
+
+
+        <h1>
+            Ingresa a tu portal
+        </h1>
+
+
+        <p>
+            Ingresa tu número de DNI para consultar
+            la información relacionada con tu atención.
+        </p>
+
+
+        <form
+            id="portalLoginForm"
+            class="portal-login-form"
+        >
+
+            <label for="dni">
+                Número de DNI
+            </label>
+
+
+            <input
+                type="text"
+                id="dni"
+                name="dni"
+                inputmode="numeric"
+                maxlength="8"
+                minlength="8"
+                pattern="[0-9]{8}"
+                placeholder="Ejemplo: 12345678"
+                autocomplete="off"
+                required
+            >
+
+
+            <small>
+                Ingresa los 8 dígitos de tu DNI.
+            </small>
+
+
+            <button
+                type="submit"
+                class="portal-login-button"
+            >
+
+                Ingresar
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+
+            <p
+                id="portalLoginMessage"
+                class="portal-login-message"
+            ></p>
+
+        </form>
+
+
+        <div class="portal-login-security">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <p>
+                El portal está destinado únicamente
+                para consultar información de tu atención.
+            </p>
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+
+<footer class="portal-login-footer">
+
+    <p>
+        © 2026 Centro de Salud San Juan de Dios.
+    </p>
+
+</footer>
+
+
+<script src="../js/portal.js"></script>
+
+
+</body>
+
+</html>

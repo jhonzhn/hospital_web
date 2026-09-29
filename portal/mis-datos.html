@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mis Datos | Portal del Paciente</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/portal.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body class="portal-body">
+
+<header class="portal-header">
+
+    <div class="portal-header-left">
+
+        <button class="portal-menu-btn" id="portalMenuBtn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <a href="portal-paciente.html" class="portal-logo">
+
+            <div class="portal-logo-icon">
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+
+            <div>
+                <strong>San Juan de Dios</strong>
+                <span>Portal del Paciente</span>
+            </div>
+
+        </a>
+
+    </div>
+
+    <div class="portal-header-right">
+
+        <div class="portal-user-mini">
+
+            <div class="portal-user-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div class="portal-user-info">
+                <strong id="portalUserName">Paciente</strong>
+                <span id="portalUserDni">DNI: --------</span>
+            </div>
+
+        </div>
+
+        <button class="portal-logout-btn" id="logoutBtn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Salir</span>
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="portal-layout">
+
+<aside class="portal-sidebar" id="portalSidebar">
+
+    <div class="portal-sidebar-title">
+        MI CUENTA
+    </div>
+
+    <nav class="portal-nav">
+
+        <a href="portal-paciente.html" class="portal-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Inicio</span>
+        </a>
+
+        <a href="mis-datos.html" class="portal-nav-item active">
+            <i class="fa-solid fa-user"></i>
+            <span>Mis datos</span>
+        </a>
+
+        <a href="mis-citas.html" class="portal-nav-item">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Mis citas</span>
+        </a>
+
+        <a href="mis-consultas.html" class="portal-nav-item">
+            <i class="fa-solid fa-stethoscope"></i>
+            <span>Mis consultas</span>
+        </a>
+
+        <a href="mis-medicos.html" class="portal-nav-item">
+            <i class="fa-solid fa-user-doctor"></i>
+            <span>Mis médicos</span>
+        </a>
+
+        <a href="mis-recetas.html" class="portal-nav-item">
+            <i class="fa-solid fa-prescription-bottle-medical"></i>
+            <span>Mis recetas</span>
+        </a>
+
+        <a href="historial-clinico.html" class="portal-nav-item">
+            <i class="fa-solid fa-file-medical"></i>
+            <span>Historial clínico</span>
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<main class="portal-main">
+
+    <div class="portal-page-header">
+
+        <div>
+
+            <span class="portal-welcome-label">
+                INFORMACIÓN PERSONAL
+            </span>
+
+            <h1>
+                Mis datos
+            </h1>
+
+            <p>
+                Consulta y administra tu información personal.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <section class="profile-card">
+
+        <div class="profile-card-header">
+
+            <div class="profile-avatar-large">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div>
+
+                <h2 id="profileName">
+                    Paciente
+                </h2>
+
+                <p>
+                    Información registrada en el sistema
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form id="profileForm">
+
+            <div class="form-grid">
+
+                <div class="portal-form-group">
+
+                    <label>
+                        Nombre completo
+                    </label>
+
+                    <div class="input-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="profileFullName"
+                            placeholder="Nombre completo"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="portal-form-group">
+
+                    <label>
+                        DNI
+                    </label>
+
+                    <div class="input-icon">
+
+                        <i class="fa-solid fa-id-card"></i>
+
+                        <input
+                            type="text"
+                            id="profileDni"
+                            placeholder="DNI"
+                            maxlength="8"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="portal-form-group">
+
+                    <label>
+                        Teléfono
+                    </label>
+
+                    <div class="input-icon">
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        <input
+                            type="tel"
+                            id="profilePhone"
+                            placeholder="Teléfono"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="portal-form-group">
+
+                    <label>
+                        Correo electrónico
+                    </label>
+
+                    <div class="input-icon">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="profileEmail"
+                            placeholder="Correo electrónico"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="portal-form-group full">
+
+                    <label>
+                        Dirección
+                    </label>
+
+                    <div class="input-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <input
+                            type="text"
+                            id="profileAddress"
+                            placeholder="Dirección"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-actions">
+
+                <button type="button" class="portal-secondary-btn">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="portal-primary-btn">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <section class="portal-info-banner">
+
+        <div class="info-banner-icon">
+            <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <div>
+
+            <h3>
+                Información privada
+            </h3>
+
+            <p>
+                Los datos mostrados en esta sección pertenecen al paciente
+                y deben mantenerse protegidos.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+</div>
+
+
+<script src="../js/main.js"></script>
+<script src="../js/portal.js"></script>
+
+</body>
+</html>
