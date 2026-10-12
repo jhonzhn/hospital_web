@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const patientData = {
 
             dni: dni,
+            nombre: "Paciente",
 
             cita: {
 

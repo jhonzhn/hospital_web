@@ -27,7 +27,7 @@
             <i class="fa-solid fa-bars"></i>
         </button>
 
-        <a href="portal-paciente.html" class="portal-logo">
+        <a href="panel-paciente.html" class="portal-logo">
 
             <div class="portal-logo-icon">
                 <i class="fa-solid fa-heart-pulse"></i>
@@ -77,7 +77,7 @@
 
     <nav class="portal-nav">
 
-        <a href="portal-paciente.html" class="portal-nav-item">
+        <a href="panel-paciente.html" class="portal-nav-item">
             <i class="fa-solid fa-house"></i>
             <span>Inicio</span>
         </a>
@@ -137,7 +137,7 @@
 
         </div>
 
-        <a href="../especialidades.html" class="portal-primary-btn">
+        <a href="reservar-cita.html" class="portal-primary-btn">
             <i class="fa-solid fa-calendar-plus"></i>
             Nueva cita
         </a>
@@ -180,7 +180,7 @@
                     Las citas que reserves aparecerán aquí.
                 </p>
 
-                <a href="../especialidades.html" class="portal-primary-btn">
+                    <a href="reservar-cita.html" class="portal-primary-btn">
                     Reservar una cita
                 </a>
 
@@ -221,6 +221,7 @@
                         <th>Especialidad</th>
                         <th>Médico</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
 
                 </thead>
@@ -253,8 +254,32 @@
 
 
 <script src="../js/main.js"></script>
-<script src="../js/citas.js"></script>
 <script src="../js/portal.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const saved = sessionStorage.getItem("sjdd_patient");
+    if (!saved) { window.location.href = "portal-paciente.html"; return; }
+
+    const appointment = JSON.parse(saved).cita;
+    if (!appointment) return;
+
+    document.getElementById("upcomingAppointments").innerHTML = `
+        <div class="portal-table-container">
+            <table class="portal-table">
+                <thead><tr><th>Fecha</th><th>Especialidad</th><th>Médico</th><th>Hora</th><th>Estado</th></tr></thead>
+                <tbody><tr><td>${appointment.fecha}</td><td>${appointment.especialidad}</td><td>${appointment.medico}</td><td>${appointment.hora}</td><td><span class="status-badge">${appointment.estado || "Programada"}</span></td><td class="appointment-actions"><a class="appointment-action edit" href="reservar-cita.html?editar=1"><i class="fa-solid fa-pen"></i> Reprogramar</a><button class="appointment-action cancel" id="cancelAppointment" type="button"><i class="fa-solid fa-xmark"></i> Cancelar</button></td></tr></tbody>
+            </table>
+        </div>`;
+
+    document.getElementById("cancelAppointment").addEventListener("click", () => {
+        if (!window.confirm("¿Deseas cancelar esta cita?")) return;
+        const patient = JSON.parse(sessionStorage.getItem("sjdd_patient"));
+        delete patient.cita;
+        sessionStorage.setItem("sjdd_patient", JSON.stringify(patient));
+        document.getElementById("upcomingAppointments").innerHTML = `<div class="portal-empty-state"><div class="empty-icon"><i class="fa-regular fa-calendar-xmark"></i></div><h3>No tienes citas próximas</h3><p>Cuando quieras, puedes reservar una nueva cita desde el portal.</p><a href="reservar-cita.html" class="portal-primary-btn">Reservar una cita</a></div>`;
+    });
+});
+</script>
 
 </body>
 </html>

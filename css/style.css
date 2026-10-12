@@ -20,9 +20,13 @@
     --light-2: #eef5f6;
 
     --border: #dce8ea;
+    --background: #f7fafb;
+    --text-muted: #819196;
+    --text-light: #819196;
 
     --shadow-sm: 0 5px 20px rgba(22, 50, 56, 0.06);
     --shadow: 0 15px 45px rgba(22, 50, 56, 0.10);
+    --shadow-md: 0 12px 32px rgba(22, 50, 56, 0.12);
     --shadow-lg: 0 25px 70px rgba(22, 50, 56, 0.15);
 
     --radius-sm: 10px;
@@ -199,6 +203,52 @@ h3 {
     box-shadow: var(--shadow-sm);
 }
 
+/* Encabezado compartido por las páginas internas */
+.main-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, .97);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 5px 20px rgba(22, 50, 56, .05);
+}
+
+.main-header .header-container {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.main-header .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    flex-shrink: 0;
+}
+
+.main-header .logo-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 13px;
+    box-shadow: 0 8px 18px rgba(8,127,140,.18);
+}
+
+.main-header .logo-text strong,
+.main-header .logo-text span { display: block; }
+.main-header .logo-text strong { color: var(--dark); font-family: "Manrope", Arial, sans-serif; font-size: .94rem; }
+.main-header .logo-text span { margin-top: 2px; color: var(--muted); font-size: .7rem; }
+.menu-toggle { display: none; width: 44px; height: 44px; color: var(--primary); background: var(--primary-light); border-radius: 12px; font-size: 1.05rem; cursor: pointer; }
+
+.main-header ~ main .page-hero { padding: 72px 0 64px; }
+.main-header ~ main .page-hero h1 { max-width: 720px; font-size: clamp(2.4rem, 4.4vw, 4rem); }
+.main-header ~ main .page-hero p { max-width: 650px; font-size: 1.02rem; line-height: 1.65; }
+
 .header-inner {
     width: min(100% - 40px, var(--container));
     min-height: 78px;
@@ -245,6 +295,19 @@ h3 {
 
     transition: transform var(--transition);
 }
+
+/* Logotipo institucional del Centro de Salud San Juan de Dios - Pisco. */
+.brand-icon,
+.main-header .logo-icon,
+.main-footer .logo-icon {
+    color: transparent;
+    background: url("../img/logo-sjd-pisco-circle.png") center / contain no-repeat;
+    border-radius: 50%;
+}
+
+.brand-icon *,
+.main-header .logo-icon *,
+.main-footer .logo-icon * { opacity: 0; }
 
 .brand:hover .brand-icon {
     transform: rotate(-5deg) scale(1.05);
@@ -1231,6 +1294,61 @@ h3 {
     color: var(--muted);
 }
 
+/* =========================================================
+   CONTACTO
+========================================================= */
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: .9fr 1.1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+.contact-details {
+    display: grid;
+    gap: 14px;
+}
+
+.contact-card,
+.contact-form-card {
+    padding: 28px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.contact-card-icon {
+    width: 45px;
+    height: 45px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    color: var(--primary);
+    background: var(--primary-light);
+    border-radius: 13px;
+}
+
+.contact-card h3 { font-size: 1rem; }
+.contact-card p { margin-top: 4px; color: var(--muted); font-size: .88rem; }
+.contact-form-card h2 { font-size: 1.45rem; }
+.contact-form-card > p { margin-top: 8px; color: var(--muted); }
+.contact-form { display: grid; gap: 16px; margin-top: 24px; }
+.contact-form label { display: grid; gap: 7px; color: var(--dark); font-size: .82rem; font-weight: 800; }
+.contact-form input,
+.contact-form textarea { width: 100%; padding: 13px 14px; color: var(--dark); background: #fbfdfd; border: 1px solid var(--border); border-radius: 10px; outline: 0; }
+.contact-form textarea { min-height: 122px; resize: vertical; }
+.contact-form input:focus,
+.contact-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(8,127,140,.12); }
+.contact-form-status { min-height: 20px; color: var(--primary); font-size: .84rem; font-weight: 700; }
+
 
 /* =========================================================
    PAGE HERO
@@ -1696,6 +1814,63 @@ h3 {
     font-size: .72rem;
 }
 
+/* Pie de página compacto y coherente en todas las páginas públicas. */
+.site-footer .footer-main {
+    padding: 42px 0 30px;
+    gap: 42px;
+}
+
+.site-footer .footer-brand > p { margin-top: 13px; }
+.site-footer .footer-column { gap: 6px; }
+.site-footer .footer-bottom { padding: 14px 0; }
+
+.main-footer {
+    color: rgba(255,255,255,.72);
+    background: #122c31;
+}
+
+.main-footer .footer-grid {
+    padding: 42px 0 30px;
+    display: grid;
+    grid-template-columns: 1.45fr 1fr 1fr;
+    gap: 42px;
+}
+
+.main-footer .footer-brand::after {
+    content: "Atención cercana, profesional y pensada para el bienestar de nuestros pacientes.";
+    display: block;
+    max-width: 370px;
+    margin-top: 13px;
+    font-size: .8rem;
+    line-height: 1.65;
+}
+
+.main-footer .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.main-footer .logo-icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 12px;
+}
+
+.main-footer .logo-text strong,
+.main-footer .logo-text span { display: block; }
+.main-footer .logo-text strong { color: var(--white); font-family: "Manrope", Arial, sans-serif; font-size: .9rem; }
+.main-footer .logo-text span { margin-top: 2px; color: rgba(255,255,255,.58); font-size: .7rem; }
+.main-footer .footer-column { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.main-footer .footer-column h3 { margin-bottom: 5px; color: var(--white); font-size: .86rem; }
+.main-footer .footer-column a { font-size: .78rem; }.main-footer .footer-column a:hover { color: var(--white); }
+.main-footer .footer-bottom { padding: 14px 0; border-top: 1px solid rgba(255,255,255,.09); font-size: .72rem; }
+.main-footer .footer-bottom .container { width: min(100% - 40px, var(--container)); margin: auto; }
+
 
 /* =========================================================
    BACK TO TOP
@@ -1759,6 +1934,20 @@ h3 {
 .reveal.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Imágenes institucionales y campañas de salud */
+.hero-image-wrapper > img[src*="centro-salud-fachada"] {
+    object-position: center 73%;
+}
+
+.section-image img[src*="centro-salud-fachada"] {
+    object-position: center 70%;
+}
+
+.promotion-image img[src*="campana-"] {
+    object-fit: cover;
+    object-position: center top;
 }
 
 
