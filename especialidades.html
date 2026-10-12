@@ -198,7 +198,7 @@
                 <span class="section-label">ATENCIÓN DESTACADA</span>
                 <h2>Obstetricia y salud materna</h2>
                 <p>Orientación y acompañamiento durante el embarazo, el puerperio y el cuidado de la salud sexual y reproductiva.</p>
-                <a href="contacto.html" class="btn btn-primary">Consultar atención <span>→</span></a>
+                <button type="button" class="btn btn-primary specialty-open" data-specialty="obstetricia">Ver video e información <span>→</span></button>
             </div>
         </article>
 
@@ -474,7 +474,7 @@
 
     <div
         class="specialty-modal-overlay"
-        id="specialtyModalOverlay"
+        data-close-modal
     ></div>
 
 
@@ -487,8 +487,8 @@
 
         <button
             type="button"
-            class="specialty-modal-close"
-            id="specialtyModalClose"
+            class="modal-close"
+            id="modalSpecialtyClose"
             aria-label="Cerrar ventana"
         >
 
@@ -497,7 +497,7 @@
         </button>
 
 
-        <div class="specialty-modal-header">
+        <div class="specialty-modal-header modal-header">
 
             <span id="modalSpecialtyNumber">
                 ESPECIALIDAD
@@ -532,73 +532,35 @@
                 </div>
 
 
-                <video
-                    id="modalSpecialtyVideo"
-                    controls
-                    preload="metadata"
-                >
-
-                    <source
-                        id="modalVideoSource"
-                        src=""
-                        type="video/mp4"
-                    >
-
-                    Tu navegador no puede reproducir este video.
-
-                </video>
+                <div class="modal-video">
+                    <iframe id="modalSpecialtyVideo" title="Video informativo de la especialidad" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen hidden></iframe>
+                    <div id="videoPlaceholder" class="video-placeholder">
+                        <i class="fa-solid fa-circle-play"></i>
+                        <strong>Video informativo próximamente</strong>
+                        <span>Este espacio está listo para colocar el video de un minuto de esta especialidad.</span>
+                    </div>
+                </div>
 
             </div>
 
 
 
-            <!-- FOTOS -->
+            <!-- CONCEPTO -->
 
-            <div class="modal-photos-section">
+            <div class="modal-concept">
 
                 <div class="modal-section-title">
 
-                    <i class="fa-solid fa-images"></i>
+                    <i class="fa-solid fa-notes-medical"></i>
 
                     <span>
-                        Ubicación
+                        ¿De qué trata?
                     </span>
 
                 </div>
 
 
-                <div class="modal-photos">
-
-                    <figure>
-
-                        <img
-                            id="modalPhotoOne"
-                            src=""
-                            alt=""
-                        >
-
-                        <figcaption>
-                            Entrada
-                        </figcaption>
-
-                    </figure>
-
-
-                    <figure>
-
-                        <img
-                            id="modalPhotoTwo"
-                            src=""
-                            alt=""
-                        >
-
-                        <figcaption>
-                            Área de atención
-                        </figcaption>
-
-                    </figure>
-
-                </div>
+                <p id="modalSpecialtyConcept"></p>
 
             </div>
 
