@@ -433,9 +433,9 @@ a {
 .portal-header .portal-logo-icon {
     width: 40px;
     height: 40px;
-    color: #fff;
-    background: linear-gradient(135deg, var(--portal-primary), var(--portal-primary-dark));
-    border-radius: 12px;
+    color: transparent;
+    background: url("../img/logo-sjd-pisco-circle.png") center / contain no-repeat;
+    border-radius: 50%;
 }
 
 .portal-header .portal-logo strong { font-size: .92rem; }
@@ -497,7 +497,7 @@ a {
 .dashboard-topbar { min-height: 76px; padding: 0 clamp(18px, 4vw, 46px); display: flex; align-items: center; justify-content: space-between; gap: 20px; background: #fff; border-bottom: 1px solid var(--portal-border); }
 .dashboard-brand, .dashboard-user { display: inline-flex; align-items: center; gap: 11px; }
 .dashboard-brand { pointer-events: none; cursor: default; }
-.dashboard-brand-icon { width: 40px; height: 40px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, var(--portal-primary), var(--portal-primary-dark)); border-radius: 12px; }
+.dashboard-brand-icon { width: 40px; height: 40px; display: grid; place-items: center; color: transparent; background: url("../img/logo-sjd-pisco-circle.png") center / contain no-repeat; border-radius: 50%; }
 .dashboard-brand strong, .dashboard-brand small, .dashboard-user strong, .dashboard-user small { display: block; }
 .dashboard-brand strong { color: var(--portal-dark); font-family: var(--portal-title); font-size: .92rem; }
 .dashboard-brand small, .dashboard-user small { margin-top: 2px; color: var(--portal-muted); font-size: .7rem; }

@@ -1856,9 +1856,9 @@ h3 {
     height: 40px;
     display: grid;
     place-items: center;
-    color: var(--white);
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    border-radius: 12px;
+    color: transparent;
+    background: url("../img/logo-sjd-pisco-circle.png") center / contain no-repeat;
+    border-radius: 50%;
 }
 
 .main-footer .logo-text strong,
