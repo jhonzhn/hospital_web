@@ -254,6 +254,7 @@
 
 
 <script src="../js/main.js"></script>
+<script src="../js/google-sheets-config.js"></script>
 <script src="../js/portal.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -271,9 +272,20 @@ document.addEventListener("DOMContentLoaded", () => {
             </table>
         </div>`;
 
-    document.getElementById("cancelAppointment").addEventListener("click", () => {
+    document.getElementById("cancelAppointment").addEventListener("click", async () => {
         if (!window.confirm("¿Deseas cancelar esta cita?")) return;
         const patient = JSON.parse(sessionStorage.getItem("sjdd_patient"));
+        const endpoint = window.SJDD_GOOGLE_SHEETS_URL;
+        if (!appointment.codigo) {
+            window.alert("Esta cita fue creada antes de activar la sincronización. Puedes cancelarla en el portal y actualizar su estado manualmente en Google Sheets.");
+        } else if (endpoint) {
+            try {
+                await fetch(endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "cancelar", codigo: appointment.codigo }) });
+            } catch (error) {
+                window.alert("No se pudo enviar la cancelación al centro. Intenta nuevamente.");
+                return;
+            }
+        }
         delete patient.cita;
         sessionStorage.setItem("sjdd_patient", JSON.stringify(patient));
         document.getElementById("upcomingAppointments").innerHTML = `<div class="portal-empty-state"><div class="empty-icon"><i class="fa-regular fa-calendar-xmark"></i></div><h3>No tienes citas próximas</h3><p>Cuando quieras, puedes reservar una nueva cita desde el portal.</p><a href="reservar-cita.html" class="portal-primary-btn">Reservar una cita</a></div>`;

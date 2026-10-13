@@ -202,45 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       BACK TO TOP
-    ===================================================== */
-
-    const backToTop = document.getElementById("backToTop");
-
-    if (backToTop) {
-
-        const updateBackToTop = () => {
-
-            if (window.scrollY > 450) {
-                backToTop.classList.add("show");
-            } else {
-                backToTop.classList.remove("show");
-            }
-
-        };
-
-        updateBackToTop();
-
-        window.addEventListener(
-            "scroll",
-            updateBackToTop,
-            { passive: true }
-        );
-
-
-        backToTop.addEventListener("click", () => {
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        });
-
-    }
-
-
-    /* =====================================================
        REVEAL AL HACER SCROLL
     ===================================================== */
 
@@ -315,5 +276,94 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         });
+
+
+    /* =====================================================
+       BURBUJA DE AYUDA (PÁGINAS PÚBLICAS)
+    ===================================================== */
+
+    if (!window.location.pathname.includes("/portal/")) {
+        const helpChat = document.createElement("section");
+        helpChat.className = "health-help-chat";
+        helpChat.innerHTML = `
+            <button class="health-help-toggle" type="button" aria-expanded="false" aria-controls="healthHelpPanel" aria-label="Abrir asistente de ayuda">
+                <i class="fa-solid fa-comment-medical" aria-hidden="true"></i><span>¿Necesitas ayuda?</span>
+            </button>
+            <div class="health-help-panel" id="healthHelpPanel" hidden>
+                <div class="health-help-header">
+                    <div><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i><strong>Asistente de orientación</strong><small>Centro de Salud San Juan de Dios</small></div>
+                    <button class="health-help-close" type="button" aria-label="Cerrar asistente">×</button>
+                </div>
+                <div class="health-help-messages" aria-live="polite">
+                    <div class="health-help-message bot">Hola. Puedo ayudarte a encontrar información, una especialidad o el acceso al portal. No realizo diagnósticos médicos.</div>
+                </div>
+                <div class="health-help-options" aria-label="Consultas rápidas">
+                    <button type="button" data-question="cita">Quiero una cita</button>
+                    <button type="button" data-question="especialidad">Ver especialidades</button>
+                    <button type="button" data-question="portal">Ingresar al portal</button>
+                    <button type="button" data-question="horario">Horarios y contacto</button>
+                </div>
+                <form class="health-help-form">
+                    <label class="sr-only" for="healthHelpInput">Escribe tu consulta</label>
+                    <input id="healthHelpInput" type="text" maxlength="220" placeholder="Escribe tu consulta" autocomplete="off">
+                    <button type="submit" aria-label="Enviar consulta"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button>
+                </form>
+                <p class="health-help-note">Para una emergencia o malestar grave, busca atención inmediata.</p>
+            </div>`;
+        document.body.appendChild(helpChat);
+
+        const toggle = helpChat.querySelector(".health-help-toggle");
+        const panel = helpChat.querySelector(".health-help-panel");
+        const close = helpChat.querySelector(".health-help-close");
+        const messages = helpChat.querySelector(".health-help-messages");
+        const form = helpChat.querySelector(".health-help-form");
+        const input = helpChat.querySelector("input");
+
+        const setOpen = (open) => {
+            panel.hidden = !open;
+            toggle.setAttribute("aria-expanded", String(open));
+            if (open) input.focus();
+        };
+
+        const addMessage = (text, type = "bot", action = null) => {
+            const message = document.createElement("div");
+            message.className = `health-help-message ${type}`;
+            message.textContent = text;
+            if (action) {
+                const link = document.createElement("a");
+                link.href = action.href;
+                link.textContent = action.label;
+                message.appendChild(link);
+            }
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
+        };
+
+        const reply = (question) => {
+            const text = question.toLowerCase();
+            if (/cita|reservar|consulta/.test(text)) return addMessage("Puedes solicitar una cita desde el portal del paciente. Si necesitas orientación previa, revisa las especialidades.", "bot", { href: "portal/portal-paciente.html", label: "Ir al portal" });
+            if (/especialidad|cardio|diente|odont|niñ|pediatr|psico|nutri|obstet/.test(text)) return addMessage("Tenemos información sobre Cardiología, Odontología, Pediatría, Psicología, Nutrición y Obstetricia.", "bot", { href: "especialidades.html", label: "Ver especialidades" });
+            if (/portal|dni|resultado|historial/.test(text)) return addMessage("El portal te permite consultar información de atención, citas y datos personales con tu DNI.", "bot", { href: "portal/portal-paciente.html", label: "Ingresar al portal" });
+            if (/horario|hora|contacto|direcci|teléfono|telefono|ubicaci/.test(text)) return addMessage("Revisa nuestros canales de atención y confirma la disponibilidad antes de tu visita.", "bot", { href: "contacto.html", label: "Ver contacto" });
+            if (/dolor|fiebre|sangre|mareo|síntoma|sintoma|medicamento/.test(text)) return addMessage("No puedo evaluar síntomas ni indicar medicamentos. Si el malestar es intenso, repentino o te preocupa, busca atención inmediata. Para orientación no urgente, solicita una cita.", "bot", { href: "portal/portal-paciente.html", label: "Solicitar cita" });
+            return addMessage("Puedo orientarte sobre citas, especialidades, el portal, horarios y contacto. También puedes escribirnos desde Contacto.", "bot", { href: "contacto.html", label: "Ir a contacto" });
+        };
+
+        toggle.addEventListener("click", () => setOpen(panel.hidden));
+        close.addEventListener("click", () => setOpen(false));
+        helpChat.querySelectorAll("[data-question]").forEach(button => button.addEventListener("click", () => {
+            const question = button.textContent;
+            addMessage(question, "user");
+            reply(question);
+        }));
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+            const question = input.value.trim();
+            if (!question) return;
+            addMessage(question, "user");
+            input.value = "";
+            reply(question);
+        });
+    }
 
 });
