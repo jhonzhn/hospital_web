@@ -1,5 +1,28 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Elimina solamente la cita de demostración usada en versiones anteriores.
+    // Las citas reales se conservan porque incluyen un código de solicitud.
+    const savedPatient = sessionStorage.getItem("sjdd_patient");
+    if (savedPatient) {
+        try {
+            const patient = JSON.parse(savedPatient);
+            const demoAppointment = patient.cita;
+            const isLegacyDemo = demoAppointment && !demoAppointment.codigo &&
+                demoAppointment.especialidad === "Medicina General" &&
+                demoAppointment.medico === "Dr. Carlos Pérez" &&
+                demoAppointment.fecha === "30/09/2026" &&
+                demoAppointment.hora === "09:00 a. m." &&
+                demoAppointment.ubicacion === "Puerta 3";
+
+            if (isLegacyDemo) {
+                delete patient.cita;
+                sessionStorage.setItem("sjdd_patient", JSON.stringify(patient));
+            }
+        } catch (_) {
+            sessionStorage.removeItem("sjdd_patient");
+        }
+    }
+
     const form =
         document.getElementById("portalLoginForm");
 
@@ -45,23 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const patientData = {
 
             dni: dni,
-            nombre: "Paciente",
-
-            cita: {
-
-                especialidad: "Medicina General",
-
-                medico: "Dr. Carlos Pérez",
-
-                fecha: "30/09/2026",
-
-                hora: "09:00 a. m.",
-
-                ubicacion: "Puerta 3",
-
-                estado: "Atención programada"
-
-            }
+            nombre: "Paciente"
 
         };
 
