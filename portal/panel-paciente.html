@@ -31,6 +31,7 @@
             <section class="dashboard-data-card"><span class="data-card-icon"><i class="fa-solid fa-id-card"></i></span><div><p class="dashboard-eyebrow">TUS DATOS</p><h2>Tu información está protegida</h2><p>DNI registrado: <strong id="patientDni">—</strong>. Mantén tu información de contacto actualizada para recibir una mejor atención.</p></div><a href="mis-datos.html" class="dashboard-outline-button">Actualizar datos</a></section>
         </main>
     </div>
+    <script src="../js/google-sheets-config.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const saved = sessionStorage.getItem('sjdd_patient');
@@ -39,14 +40,36 @@
             const legacyDemo = patient.cita && !patient.cita.codigo && patient.cita.especialidad === 'Medicina General' && patient.cita.medico === 'Dr. Carlos Pérez' && patient.cita.fecha === '30/09/2026' && patient.cita.hora === '09:00 a. m.' && patient.cita.ubicacion === 'Puerta 3';
             if (legacyDemo) { delete patient.cita; sessionStorage.setItem('sjdd_patient', JSON.stringify(patient)); }
             const appointment = patient.cita || {}, name = patient.nombre || 'Paciente';
-            const hasAppointment = Boolean(patient.cita);
-            document.getElementById('dashboardAppointment').hidden = !hasAppointment;
-            document.getElementById('appointmentMetricCount').textContent = hasAppointment ? '1' : '0';
-            document.getElementById('appointmentMetricLabel').textContent = hasAppointment ? 'Cita programada' : 'Sin citas programadas';
+            function renderAppointmentSummary() {
+                const hasAppointment = Boolean(patient.cita) && appointment.estado !== 'Atendida' && appointment.estado !== 'Cancelada';
+                document.getElementById('dashboardAppointment').hidden = !hasAppointment;
+                document.getElementById('appointmentMetricCount').textContent = hasAppointment ? '1' : '0';
+                document.getElementById('appointmentMetricLabel').textContent = hasAppointment ? 'Cita programada' : 'Sin citas programadas';
+            }
+            renderAppointmentSummary();
             document.getElementById('patientName').textContent = name; document.getElementById('topPatientName').textContent = name; document.getElementById('patientDni').textContent = patient.dni || '—';
             document.getElementById('appointmentSpecialty').textContent = appointment.especialidad || 'Atención médica'; document.getElementById('appointmentDoctor').textContent = appointment.medico || 'Por confirmar'; document.getElementById('appointmentTime').textContent = appointment.hora || 'Por confirmar'; document.getElementById('appointmentLocation').textContent = appointment.ubicacion || 'Por confirmar';
             const parts = (appointment.fecha || '').split('/'), months = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC']; if (parts.length === 3) { document.getElementById('appointmentDay').textContent = parts[0]; document.getElementById('appointmentMonth').textContent = months[Number(parts[1]) - 1] || '—'; }
             document.getElementById('logoutButton').addEventListener('click', function () { sessionStorage.removeItem('sjdd_patient'); window.location.href = 'portal-paciente.html'; });
+
+            // Consulta el estado guardado por recepción en Google Sheets.
+            if (appointment.codigo && window.SJDD_GOOGLE_SHEETS_URL) {
+                const callback = '__sjddDashboardStatus' + Date.now();
+                const script = document.createElement('script');
+                const timeout = setTimeout(cleanup, 10000);
+                function cleanup() { clearTimeout(timeout); delete window[callback]; script.remove(); }
+                window[callback] = function (data) {
+                    cleanup();
+                    if (!data || !data.ok || !data.estado) return;
+                    appointment.estado = data.estado;
+                    patient.cita = appointment;
+                    sessionStorage.setItem('sjdd_patient', JSON.stringify(patient));
+                    renderAppointmentSummary();
+                };
+                script.onerror = cleanup;
+                script.src = window.SJDD_GOOGLE_SHEETS_URL + '?action=estado_encuesta&codigo=' + encodeURIComponent(appointment.codigo) + '&callback=' + callback;
+                document.body.appendChild(script);
+            }
         });
     </script>
 </body>
