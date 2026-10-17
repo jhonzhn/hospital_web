@@ -248,6 +248,12 @@
 
     </section>
 
+    <section class="survey-invite" aria-labelledby="survey-invite-title">
+        <div class="survey-invite-icon"><i class="fa-regular fa-star"></i></div>
+        <div><span class="section-label">TU OPINIÓN</span><h2 id="survey-invite-title">Comparte una opinión o recomendación</h2><p>Envía una sugerencia general para ayudarnos a mejorar. No necesitas tener una cita registrada.</p></div>
+        <a href="encuesta-atencion.html" class="portal-outline-btn">Enviar opinión <i class="fa-solid fa-arrow-right"></i></a>
+    </section>
+
 </main>
 
 </div>
@@ -260,21 +266,26 @@
 document.addEventListener("DOMContentLoaded", () => {
     const saved = sessionStorage.getItem("sjdd_patient");
     if (!saved) { window.location.href = "portal-paciente.html"; return; }
-
-    const appointment = JSON.parse(saved).cita;
+    const patient = JSON.parse(saved);
+    const appointment = patient.cita;
     if (!appointment) return;
 
-    document.getElementById("upcomingAppointments").innerHTML = `
-        <div class="portal-table-container">
-            <table class="portal-table">
-                <thead><tr><th>Fecha</th><th>Especialidad</th><th>Médico</th><th>Hora</th><th>Estado</th></tr></thead>
-                <tbody><tr><td>${appointment.fecha}</td><td>${appointment.especialidad}</td><td>${appointment.medico}</td><td>${appointment.hora}</td><td><span class="status-badge">${appointment.estado || "Programada"}</span></td><td class="appointment-actions"><a class="appointment-action edit" href="reservar-cita.html?editar=1"><i class="fa-solid fa-pen"></i> Reprogramar</a><button class="appointment-action cancel" id="cancelAppointment" type="button"><i class="fa-solid fa-xmark"></i> Cancelar</button></td></tr></tbody>
-            </table>
-        </div>`;
+    const emptyUpcoming = `<div class="portal-empty-state"><div class="empty-icon"><i class="fa-regular fa-calendar-xmark"></i></div><h3>No tienes citas próximas</h3><p>Cuando quieras, puedes reservar una nueva cita desde el portal.</p><a href="reservar-cita.html" class="portal-primary-btn">Reservar una cita</a></div>`;
 
-    document.getElementById("cancelAppointment").addEventListener("click", async () => {
+    function renderAppointment() {
+        const isAttended = appointment.estado === "Atendida";
+        if (isAttended) {
+            document.getElementById("upcomingAppointments").innerHTML = emptyUpcoming;
+            document.getElementById("appointmentHistory").innerHTML = `<tr><td>${appointment.fecha}</td><td>${appointment.especialidad}</td><td>${appointment.medico}</td><td><span class="status-badge">Atendida</span></td><td>—</td></tr>`;
+            return;
+        }
+
+        document.getElementById("upcomingAppointments").innerHTML = `<div class="portal-table-container"><table class="portal-table"><thead><tr><th>Fecha</th><th>Especialidad</th><th>Médico</th><th>Hora</th><th>Estado</th><th>Acciones</th></tr></thead><tbody><tr><td>${appointment.fecha}</td><td>${appointment.especialidad}</td><td>${appointment.medico}</td><td>${appointment.hora}</td><td><span class="status-badge">${appointment.estado || "Programada"}</span></td><td class="appointment-actions"><a class="appointment-action edit" href="reservar-cita.html?editar=1"><i class="fa-solid fa-pen"></i> Reprogramar</a><button class="appointment-action cancel" id="cancelAppointment" type="button"><i class="fa-solid fa-xmark"></i> Cancelar</button></td></tr></tbody></table></div>`;
+        document.getElementById("cancelAppointment").addEventListener("click", cancelAppointment);
+    }
+
+    async function cancelAppointment() {
         if (!window.confirm("¿Deseas cancelar esta cita?")) return;
-        const patient = JSON.parse(sessionStorage.getItem("sjdd_patient"));
         const endpoint = window.SJDD_GOOGLE_SHEETS_URL;
         if (!appointment.codigo) {
             window.alert("Esta cita fue creada antes de activar la sincronización. Puedes cancelarla en el portal y actualizar su estado manualmente en Google Sheets.");
@@ -288,8 +299,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         delete patient.cita;
         sessionStorage.setItem("sjdd_patient", JSON.stringify(patient));
-        document.getElementById("upcomingAppointments").innerHTML = `<div class="portal-empty-state"><div class="empty-icon"><i class="fa-regular fa-calendar-xmark"></i></div><h3>No tienes citas próximas</h3><p>Cuando quieras, puedes reservar una nueva cita desde el portal.</p><a href="reservar-cita.html" class="portal-primary-btn">Reservar una cita</a></div>`;
-    });
+        document.getElementById("upcomingAppointments").innerHTML = emptyUpcoming;
+    }
+
+    function getAppointmentStatus(code) {
+        return new Promise(function (resolve, reject) {
+            const endpoint = window.SJDD_GOOGLE_SHEETS_URL;
+            if (!endpoint || !code) { resolve(null); return; }
+            const callback = "__sjddAppointmentStatus" + Date.now();
+            const script = document.createElement("script");
+            const timeout = setTimeout(function () { cleanup(); reject(new Error("Tiempo de espera agotado.")); }, 10000);
+            function cleanup() { clearTimeout(timeout); delete window[callback]; script.remove(); }
+            window[callback] = function (data) { cleanup(); resolve(data); };
+            script.onerror = function () { cleanup(); reject(new Error("No se pudo consultar la cita.")); };
+            script.src = endpoint + "?action=estado_encuesta&codigo=" + encodeURIComponent(code) + "&callback=" + callback;
+            document.body.appendChild(script);
+        });
+    }
+
+    renderAppointment();
+    getAppointmentStatus(appointment.codigo).then(function (data) {
+        if (data && data.ok && data.estado) {
+            appointment.estado = data.estado;
+            patient.cita = appointment;
+            sessionStorage.setItem("sjdd_patient", JSON.stringify(patient));
+            renderAppointment();
+        }
+    }).catch(function () { /* Se conserva la información disponible en el portal. */ });
 });
 </script>
 

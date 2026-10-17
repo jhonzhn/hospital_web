@@ -135,6 +135,15 @@
         grid-template-columns: 1fr;
     }
 
+    .location-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .location-map-wrap,
+    .location-map {
+        min-height: 340px;
+    }
+
     .section-image {
         max-width: 680px;
     }

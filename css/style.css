@@ -1349,6 +1349,21 @@ h3 {
 .contact-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(8,127,140,.12); }
 .contact-form-status { min-height: 20px; color: var(--primary); font-size: .84rem; font-weight: 700; }
 
+/* Ubicación y mapa */
+.location-section { padding-top: 25px; background: linear-gradient(180deg, #ffffff 0%, #f4fbfc 100%); }
+.location-layout { display: grid; grid-template-columns: minmax(280px, .82fr) minmax(360px, 1.18fr); gap: 38px; align-items: center; }
+.location-copy h2 { margin-top: 9px; }
+.location-copy > p { max-width: 520px; margin-top: 13px; color: var(--muted); line-height: 1.7; }
+.location-list { display: grid; gap: 14px; margin-top: 26px; }
+.location-list li { display: flex; align-items: flex-start; gap: 12px; }
+.location-list > li > span { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; color: var(--primary); background: var(--primary-light); border-radius: 10px; font-weight: 800; }
+.location-list strong { color: var(--dark); font-size: .9rem; }
+.location-list p { margin-top: 3px; color: var(--muted); font-size: .85rem; line-height: 1.45; }
+.location-button { margin-top: 28px; }
+.location-button span { margin-left: 6px; }
+.location-map-wrap { overflow: hidden; min-height: 390px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-sm); }
+.location-map { width: 100%; height: 100%; min-height: 390px; display: block; border: 0; }
+
 
 /* =========================================================
    PAGE HERO

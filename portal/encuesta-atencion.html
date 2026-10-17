@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calificar atención | Portal del Paciente</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/portal.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="portal-body">
+    <header class="portal-header">
+        <div class="portal-header-left">
+            <button class="portal-menu-btn" id="portalMenuBtn" type="button" aria-label="Abrir menú"><i class="fa-solid fa-bars"></i></button>
+            <div class="portal-logo" aria-label="Portal del Paciente"><div class="portal-logo-icon"><i class="fa-solid fa-heart-pulse"></i></div><div><strong>San Juan de Dios</strong><span>Portal del Paciente</span></div></div>
+        </div>
+        <div class="portal-header-right">
+            <div class="portal-user-mini"><div class="portal-user-avatar"><i class="fa-solid fa-user"></i></div><div class="portal-user-info"><strong id="portalUserName">Paciente</strong><span id="portalUserDni">DNI: --------</span></div></div>
+            <button class="portal-logout-btn" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Salir</span></button>
+        </div>
+    </header>
+
+    <div class="portal-layout">
+        <aside class="portal-sidebar" id="portalSidebar">
+            <div class="portal-sidebar-title">MI CUENTA</div>
+            <nav class="portal-nav">
+                <a href="panel-paciente.html" class="portal-nav-item"><i class="fa-solid fa-house"></i><span>Inicio</span></a>
+                <a href="mis-datos.html" class="portal-nav-item"><i class="fa-solid fa-user"></i><span>Mis datos</span></a>
+                <a href="mis-citas.html" class="portal-nav-item"><i class="fa-solid fa-calendar-check"></i><span>Mis citas</span></a>
+                <a href="mis-consultas.html" class="portal-nav-item"><i class="fa-solid fa-stethoscope"></i><span>Mis consultas</span></a>
+                <a href="mis-medicos.html" class="portal-nav-item"><i class="fa-solid fa-user-doctor"></i><span>Mis médicos</span></a>
+                <a href="mis-recetas.html" class="portal-nav-item"><i class="fa-solid fa-prescription-bottle-medical"></i><span>Mis recetas</span></a>
+                <a href="historial-clinico.html" class="portal-nav-item"><i class="fa-solid fa-file-medical"></i><span>Historial clínico</span></a>
+                <a href="encuesta-atencion.html" class="portal-nav-item active"><i class="fa-regular fa-star"></i><span>Opiniones</span></a>
+            </nav>
+        </aside>
+
+        <main class="portal-main">
+            <div class="survey-page">
+                <a href="panel-paciente.html" class="booking-back"><i class="fa-solid fa-arrow-left"></i> Volver al resumen</a>
+                <section class="survey-card" aria-labelledby="surveyTitle">
+                    <span class="portal-welcome-label">OPINIONES Y RECOMENDACIONES</span>
+                    <h1 id="surveyTitle">Tu opinión nos ayuda a mejorar</h1>
+                    <p>Comparte una opinión o recomendación general. Esta encuesta es voluntaria y no solicita información médica ni está vinculada a tus citas.</p>
+
+                    <div class="survey-status" id="surveyStatus" role="status" hidden></div>
+
+                    <form class="survey-form" id="surveyForm">
+                        <div class="survey-question">
+                            <label>¿Cómo calificarías la atención recibida?</label>
+                            <div class="survey-stars" aria-label="Calificación de una a cinco estrellas">
+                                <input id="star5" type="radio" name="calificacion" value="5" required><label for="star5" title="5 estrellas">★</label>
+                                <input id="star4" type="radio" name="calificacion" value="4"><label for="star4" title="4 estrellas">★</label>
+                                <input id="star3" type="radio" name="calificacion" value="3"><label for="star3" title="3 estrellas">★</label>
+                                <input id="star2" type="radio" name="calificacion" value="2"><label for="star2" title="2 estrellas">★</label>
+                                <input id="star1" type="radio" name="calificacion" value="1"><label for="star1" title="1 estrella">★</label>
+                            </div>
+                        </div>
+                        <fieldset class="survey-question"><label>¿Cómo fue la atención recibida?</label><div class="survey-options"><label><input type="radio" name="atencion" value="Muy buena" required> Muy buena</label><label><input type="radio" name="atencion" value="Buena"> Buena</label><label><input type="radio" name="atencion" value="Regular"> Regular</label><label><input type="radio" name="atencion" value="Por mejorar"> Por mejorar</label></div></fieldset>
+                        <fieldset class="survey-question"><label>¿La información brindada fue clara?</label><div class="survey-options"><label><input type="radio" name="informacion" value="Sí" required> Sí</label><label><input type="radio" name="informacion" value="No"> No</label></div></fieldset>
+                        <div class="survey-question"><label for="surveyComment">Comentario opcional</label><textarea id="surveyComment" name="comentario" maxlength="500" placeholder="Cuéntanos qué podríamos mejorar."></textarea></div>
+                        <button class="portal-primary-btn" type="submit"><i class="fa-solid fa-paper-plane"></i> Enviar opinión</button>
+                        <p class="survey-message" id="surveyMessage" role="status"></p>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/google-sheets-config.js"></script>
+    <script src="../js/portal.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const saved = sessionStorage.getItem('sjdd_patient');
+        if (!saved) { window.location.href = 'portal-paciente.html'; return; }
+        const endpoint = window.SJDD_GOOGLE_SHEETS_URL;
+        const status = document.getElementById('surveyStatus');
+        const form = document.getElementById('surveyForm');
+        const message = document.getElementById('surveyMessage');
+
+        function showStatus(icon, title, text) {
+            status.innerHTML = '<i class="' + icon + '"></i><h2>' + title + '</h2><p>' + text + '</p>';
+            status.hidden = false;
+            form.hidden = true;
+        }
+
+        function makeOpinionCode() {
+            const values = new Uint32Array(3);
+            crypto.getRandomValues(values);
+            return 'OPI-' + Array.from(values).map(function (value) { return value.toString(36); }).join('');
+        }
+
+        function verifyOpinion(code, attempt) {
+            return new Promise(function (resolve) {
+                const callback = '__sjddOpinionStatus' + Date.now() + attempt;
+                const script = document.createElement('script');
+                const timeout = setTimeout(function () { cleanup(); resolve(false); }, 7000);
+                function cleanup() { clearTimeout(timeout); delete window[callback]; script.remove(); }
+                window[callback] = function (data) { cleanup(); resolve(Boolean(data && data.ok && data.registrada)); };
+                script.onerror = function () { cleanup(); resolve(false); };
+                script.src = endpoint + '?action=estado_opinion&codigo=' + encodeURIComponent(code) + '&callback=' + callback;
+                document.body.appendChild(script);
+            });
+        }
+
+        async function waitForOpinion(code) {
+            for (let attempt = 0; attempt < 3; attempt += 1) {
+                await new Promise(function (resolve) { setTimeout(resolve, 1000); });
+                if (await verifyOpinion(code, attempt)) return true;
+            }
+            return false;
+        }
+
+        if (!endpoint) {
+            showStatus('fa-solid fa-wifi', 'Conexión pendiente', 'La conexión con el registro de opiniones todavía no está configurada.');
+            return;
+        }
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const data = new FormData(form);
+            const opinionCode = makeOpinionCode();
+            message.textContent = 'Enviando tu opinión…';
+            try {
+                await fetch(endpoint, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'encuesta', codigo: opinionCode, calificacion: data.get('calificacion'), atencion: data.get('atencion'), informacion: data.get('informacion'), comentario: data.get('comentario') }) });
+                message.textContent = 'Verificando que tu opinión se haya registrado…';
+                if (!await waitForOpinion(opinionCode)) {
+                    message.textContent = 'No se pudo confirmar el registro. Revisa la configuración de Google Sheets e inténtalo nuevamente.';
+                    return;
+                }
+                showStatus('fa-solid fa-circle-check', 'Gracias por tu opinión', 'Tu respuesta fue registrada correctamente y ayudará a mejorar nuestra atención.');
+                setTimeout(function () { window.location.href = 'panel-paciente.html'; }, 1600);
+            } catch (error) {
+                message.textContent = 'No se pudo enviar tu opinión. Intenta nuevamente.';
+            }
+        });
+    });
+    </script>
+</body>
+</html>
