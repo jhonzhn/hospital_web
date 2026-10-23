@@ -1349,6 +1349,16 @@ h3 {
 .contact-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(8,127,140,.12); }
 .contact-form-status { min-height: 20px; color: var(--primary); font-size: .84rem; font-weight: 700; }
 
+.emergency-section { padding: 0 0 20px; }
+.emergency-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; padding: 24px; color: #704313; background: #fff7e7; border: 1px solid #f0d89c; border-radius: 18px; }
+.emergency-icon { width: 48px; height: 48px; display: grid; place-items: center; color: #fff; background: #c77b13; border-radius: 14px; font-size: 1.45rem; font-weight: 800; }
+.emergency-card .eyebrow { color: #9d610d; }
+.emergency-card h2 { color: #623a11; font-size: 1.25rem; }
+.emergency-card p { max-width: 760px; margin-top: 5px; color: #775b37; font-size: .9rem; line-height: 1.55; }
+.emergency-button { white-space: nowrap; color: #fff; background: #b86d0b; }
+.emergency-button:hover { background: #945405; }
+@media (max-width: 680px) { .emergency-card { grid-template-columns: auto 1fr; padding: 20px; }.emergency-button { grid-column: 1 / -1; width: 100%; text-align: center; } }
+
 /* Ubicación y mapa */
 .location-section { padding-top: 25px; background: linear-gradient(180deg, #ffffff 0%, #f4fbfc 100%); }
 .location-layout { display: grid; grid-template-columns: minmax(280px, .82fr) minmax(360px, 1.18fr); gap: 38px; align-items: center; }

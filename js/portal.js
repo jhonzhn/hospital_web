@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("dni");
 
     const error =
-        document.getElementById("portalError");
+        document.getElementById("portalLoginMessage");
 
 
     if (!form) return;
@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", event => {
 
         event.preventDefault();
+
+        error.textContent = "";
 
 
         const dni =
