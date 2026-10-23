@@ -92,6 +92,8 @@
                 link.click();
             });
 
+            // Primero muestra el ticket recién guardado en la sesión; después lo actualiza desde Google Sheets.
+            showTicket();
             loadTicketFromSheet();
         });
     </script>

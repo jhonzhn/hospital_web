@@ -105,6 +105,13 @@ function turnPrefix(specialty) {
   return prefixes[String(specialty || '')] || 'TUR';
 }
 
+function normalizedAppointmentDate(value) {
+  if (value instanceof Date && !isNaN(value.getTime())) {
+    return Utilities.formatDate(value, SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), 'd/M/yyyy');
+  }
+  return String(value || '').trim();
+}
+
 function nextTurnCode(turnSheet, specialty, appointmentDate) {
   const prefix = turnPrefix(specialty);
   if (turnSheet.getLastRow() < 2) return `${prefix}-001`;
@@ -113,8 +120,8 @@ function nextTurnCode(turnSheet, specialty, appointmentDate) {
   rows.forEach(row => {
     const code = String(row[0]);
     const rowSpecialty = String(row[1]);
-    const rowDate = String(row[2]);
-    if (rowSpecialty === String(specialty) && rowDate === String(appointmentDate) && code.startsWith(`${prefix}-`)) {
+    const rowDate = normalizedAppointmentDate(row[2]);
+    if (rowSpecialty === String(specialty) && rowDate === normalizedAppointmentDate(appointmentDate) && code.startsWith(`${prefix}-`)) {
       max = Math.max(max, Number(code.split('-')[1]) || 0);
     }
   });
@@ -125,11 +132,11 @@ function getTurn(turnSheet, appointmentCode) {
   const row = findTurnRow(turnSheet, appointmentCode);
   if (row === -1) return null;
   const values = turnSheet.getRange(row, 1, 1, 8).getValues()[0];
-  return { codigo: String(values[2]), especialidad: String(values[3]), fecha: String(values[4]), hora: String(values[5]), estado: String(values[6]), consultorio: String(values[7] || 'Por confirmar') };
+  return { codigo: String(values[2]), especialidad: String(values[3]), fecha: normalizedAppointmentDate(values[4]), hora: String(values[5]), estado: String(values[6]), consultorio: String(values[7] || 'Por confirmar') };
 }
 
 function publicTurn(values) {
-  return { codigo: String(values[2]), especialidad: String(values[3]), hora: String(values[5]), consultorio: String(values[7] || 'Por confirmar') };
+  return { codigo: String(values[2]), especialidad: String(values[3]), fecha: normalizedAppointmentDate(values[4]), hora: String(values[5]), consultorio: String(values[7] || 'Por confirmar') };
 }
 
 function appointmentMinutes(value) {
@@ -183,7 +190,7 @@ function doGet(event) {
       const turnSheet = spreadsheet.getSheetByName(TURN_SHEET_NAME);
       const requestedDate = String(data.fecha || '');
       const rows = turnSheet.getLastRow() < 2 ? [] : turnSheet.getRange(2, 1, turnSheet.getLastRow() - 1, 8).getValues();
-      const activeTurns = rows.filter(row => String(row[4]) === requestedDate && !['Atendido', 'Cancelada'].includes(String(row[6])));
+      const activeTurns = rows.filter(row => normalizedAppointmentDate(row[4]) === normalizedAppointmentDate(requestedDate) && !['Atendido', 'Cancelada'].includes(String(row[6])));
       const current = activeTurns.find(row => String(row[6]) === 'Llamando');
       const next = activeTurns.filter(row => String(row[6]) === 'En espera').sort((a, b) => appointmentMinutes(a[5]) - appointmentMinutes(b[5]))[0];
       return jsonOutput({ ok: true, actual: current ? publicTurn(current) : null, siguiente: next ? publicTurn(next) : null }, data.callback);
