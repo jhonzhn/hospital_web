@@ -23,12 +23,29 @@ function setupSheet() {
       'Hora solicitada',
       'Estado'
     ]);
-    sheet.getRange(1, 1, 1, 9).setFontWeight('bold');
     sheet.setFrozenRows(1);
   }
 
+  applyAppointmentFormatting(sheet);
+
   setupSurveySheet();
   setupTurnSheet();
+}
+
+function applyAppointmentFormatting(sheet) {
+  sheet.getRange(1, 1, 1, 9).setFontWeight('bold').setBackground('#078b9a').setFontColor('#ffffff');
+  const stateRange = sheet.getRange(2, 9, Math.max(sheet.getMaxRows() - 1, 1), 1);
+  const rules = [
+    SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Solicitud registrada').setBackground('#e5f5f8').setFontColor('#096d8b').setRanges([stateRange]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Reprogramada').setBackground('#fff3d8').setFontColor('#93600b').setRanges([stateRange]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Atendida').setBackground('#e7f7ef').setFontColor('#147457').setRanges([stateRange]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Cancelada').setBackground('#fff0ee').setFontColor('#a23a31').setRanges([stateRange]).build()
+  ];
+  stateRange.setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Solicitud registrada', 'Reprogramada', 'Atendida', 'Cancelada'], true)
+    .setAllowInvalid(false)
+    .build());
+  sheet.setConditionalFormatRules(rules);
 }
 
 function setupSurveySheet() {
@@ -68,9 +85,14 @@ function setupTurnSheet() {
       'Estado del turno',
       'Consultorio'
     ]);
-    sheet.getRange(1, 1, 1, 8).setFontWeight('bold');
     sheet.setFrozenRows(1);
   }
+  sheet.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#078b9a').setFontColor('#ffffff');
+  const turnStateRange = sheet.getRange(2, 7, Math.max(sheet.getMaxRows() - 1, 1), 1);
+  turnStateRange.setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInList(['En espera', 'Llamando', 'Atendido', 'Cancelada'], true)
+    .setAllowInvalid(false)
+    .build());
 }
 
 function findAppointmentRow(sheet, appointmentCode) {
@@ -167,6 +189,19 @@ function validateAppointment(data) {
   if (!String(data.hora || '').trim()) throw new Error('Selecciona un horario.');
 }
 
+function hasActiveDuplicate(sheet, dni, date, specialty, exceptCode) {
+  if (sheet.getLastRow() < 2) return false;
+  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues();
+  return rows.some(row => {
+    const samePatient = String(row[3]).trim() === String(dni).trim();
+    const sameDate = normalizedAppointmentDate(row[6]) === normalizedAppointmentDate(date);
+    const sameSpecialty = String(row[4]).trim() === String(specialty).trim();
+    const isOtherAppointment = String(row[1]) !== String(exceptCode || '');
+    const isActive = !['Atendida', 'Cancelada'].includes(String(row[8]).trim());
+    return samePatient && sameDate && sameSpecialty && isOtherAppointment && isActive;
+  });
+}
+
 function jsonOutput(payload, callback) {
   const json = JSON.stringify(payload);
   const safeCallback = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(String(callback || '')) ? callback : '';
@@ -258,6 +293,10 @@ function doPost(event) {
         const turnRow = findTurnRow(turnSheet, appointmentCode);
         if (turnRow !== -1) turnSheet.getRange(turnRow, 7).setValue('Cancelada');
       } else {
+        validateAppointment(data);
+        if (hasActiveDuplicate(sheet, data.dni, data.fecha, data.especialidad, appointmentCode)) {
+          throw new Error('Ya existe una cita activa para este DNI, fecha y especialidad.');
+        }
         sheet.getRange(rowNumber, 5, 1, 5).setValues([[
           String(data.especialidad || ''),
           String(data.profesional || ''),
@@ -297,6 +336,10 @@ function doPost(event) {
       return ContentService
         .createTextOutput(JSON.stringify({ ok: true, action: 'crear', alreadyRegistered: true }))
         .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    if (hasActiveDuplicate(sheet, data.dni, data.fecha, data.especialidad, appointmentCode)) {
+      throw new Error('Ya existe una cita activa para este DNI, fecha y especialidad.');
     }
 
     sheet.appendRow([
