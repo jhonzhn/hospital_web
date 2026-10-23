@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi turno | Portal del Paciente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/portal.css">
+</head>
+<body class="patient-dashboard">
+    <header class="dashboard-topbar"><a class="dashboard-brand" href="panel-paciente.html"><span class="dashboard-brand-icon"><i class="fa-solid fa-heart-pulse"></i></span><span><strong>San Juan de Dios</strong><small>Portal del paciente</small></span></a><div class="dashboard-topbar-actions"><a href="mis-citas.html" class="dashboard-user"><span class="dashboard-user-avatar"><i class="fa-solid fa-calendar-check"></i></span><span><strong>Mis citas</strong><small>Ver detalle</small></span></a><button id="logoutButton" class="dashboard-logout" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar sesión</span></button></div></header>
+    <main class="ticket-page">
+        <a href="mis-citas.html" class="booking-back"><i class="fa-solid fa-arrow-left"></i> Volver a mis citas</a>
+        <section id="ticketCard" class="ticket-card" aria-live="polite">
+            <div class="ticket-loading"><i class="fa-solid fa-spinner fa-spin"></i><p>Preparando tu turno…</p></div>
+        </section>
+        <div id="ticketActions" class="ticket-actions" hidden>
+            <button id="downloadTicket" class="portal-primary-btn" type="button"><i class="fa-solid fa-download"></i> Descargar ticket como imagen</button>
+            <a href="mis-citas.html" class="portal-outline-btn">Ver mis citas</a>
+        </div>
+        <p class="ticket-note"><i class="fa-solid fa-circle-info"></i> Conserva este ticket en tu teléfono. La atención se realiza según la programación y confirmación del centro.</p>
+    </main>
+    <script src="../js/google-sheets-config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const saved = sessionStorage.getItem('sjdd_patient');
+            if (!saved) { window.location.href = 'portal-paciente.html'; return; }
+            const patient = JSON.parse(saved);
+            const appointment = patient.cita;
+            const card = document.getElementById('ticketCard');
+            const actions = document.getElementById('ticketActions');
+            let ticket = appointment && appointment.turno;
+
+            document.getElementById('logoutButton').addEventListener('click', function () {
+                sessionStorage.removeItem('sjdd_patient');
+                window.location.href = 'portal-paciente.html';
+            });
+
+            function showTicket() {
+                if (!appointment || !ticket) {
+                    card.innerHTML = '<div class="ticket-loading"><i class="fa-regular fa-calendar-xmark"></i><h1>Aún no hay un turno disponible</h1><p>Tu ticket aparecerá aquí cuando la cita quede confirmada.</p><a href="mis-citas.html" class="portal-outline-btn">Volver a mis citas</a></div>';
+                    return;
+                }
+                card.innerHTML = `<div class="ticket-top"><span><i class="fa-solid fa-heart-pulse"></i> CENTRO DE SALUD SAN JUAN DE DIOS</span><small>COMPROBANTE DIGITAL</small></div><div class="ticket-body"><p class="dashboard-eyebrow">TU CÓDIGO DE TURNO</p><strong class="ticket-code">${ticket.codigo}</strong><span class="ticket-status"><i class="fa-solid fa-clock"></i> ${ticket.estado || 'En espera'}</span><div class="ticket-details"><div><span>Especialidad</span><strong>${ticket.especialidad || appointment.especialidad}</strong></div><div><span>Fecha</span><strong>${ticket.fecha || appointment.fecha}</strong></div><div><span>Hora programada</span><strong>${ticket.hora || appointment.hora}</strong></div><div><span>Consultorio</span><strong>${ticket.consultorio || 'Por confirmar'}</strong></div></div><p class="ticket-person"><i class="fa-solid fa-user"></i> Paciente: ${patient.nombre || 'Paciente'} · DNI: ${patient.dni || '—'}</p></div>`;
+                actions.hidden = false;
+            }
+
+            function loadTicketFromSheet() {
+                if (!appointment || !appointment.codigo || !window.SJDD_GOOGLE_SHEETS_URL) { showTicket(); return; }
+                const callback = '__sjddTicketStatus' + Date.now();
+                const script = document.createElement('script');
+                const timeout = setTimeout(cleanup, 10000);
+                function cleanup() { clearTimeout(timeout); delete window[callback]; script.remove(); }
+                window[callback] = function (data) {
+                    cleanup();
+                    if (data && data.ok && data.turno) {
+                        ticket = data.turno;
+                        appointment.turno = ticket;
+                        patient.cita = appointment;
+                        sessionStorage.setItem('sjdd_patient', JSON.stringify(patient));
+                    }
+                    showTicket();
+                };
+                script.onerror = function () { cleanup(); showTicket(); };
+                script.src = window.SJDD_GOOGLE_SHEETS_URL + '?action=estado_encuesta&codigo=' + encodeURIComponent(appointment.codigo) + '&callback=' + callback;
+                document.body.appendChild(script);
+            }
+
+            document.getElementById('downloadTicket').addEventListener('click', function () {
+                if (!appointment || !ticket) return;
+                const canvas = document.createElement('canvas');
+                canvas.width = 1080; canvas.height = 1350;
+                const context = canvas.getContext('2d');
+                context.fillStyle = '#f4fafb'; context.fillRect(0, 0, canvas.width, canvas.height);
+                context.fillStyle = '#087f8c'; context.fillRect(0, 0, canvas.width, 220);
+                context.fillStyle = '#ffffff'; context.font = '700 38px Arial'; context.fillText('CENTRO DE SALUD SAN JUAN DE DIOS', 70, 100);
+                context.font = '500 26px Arial'; context.fillText('COMPROBANTE DIGITAL DE TURNO', 70, 152);
+                context.fillStyle = '#17313a'; context.font = '700 32px Arial'; context.fillText('TU CÓDIGO DE TURNO', 70, 320);
+                context.fillStyle = '#087f8c'; context.font = '800 150px Arial'; context.fillText(ticket.codigo, 70, 475);
+                context.strokeStyle = '#bcd9de'; context.lineWidth = 3; context.strokeRect(60, 560, 960, 420);
+                const details = [['Especialidad', ticket.especialidad || appointment.especialidad], ['Fecha', ticket.fecha || appointment.fecha], ['Hora programada', ticket.hora || appointment.hora], ['Consultorio', ticket.consultorio || 'Por confirmar']];
+                details.forEach(function (item, index) { const y = 640 + index * 80; context.fillStyle = '#69828a'; context.font = '500 25px Arial'; context.fillText(item[0], 95, y); context.fillStyle = '#17313a'; context.font = '700 30px Arial'; context.fillText(item[1], 410, y); });
+                context.fillStyle = '#527178'; context.font = '500 26px Arial'; context.fillText('Paciente: ' + (patient.nombre || 'Paciente'), 70, 1080);
+                context.fillText('DNI: ' + (patient.dni || '—'), 70, 1125);
+                context.fillStyle = '#805018'; context.font = '600 25px Arial'; context.fillText('Conserva este ticket y preséntalo al llegar.', 70, 1225);
+                const link = document.createElement('a');
+                link.download = 'turno-' + ticket.codigo + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+
+            loadTicketFromSheet();
+        });
+    </script>
+</body>
+</html>

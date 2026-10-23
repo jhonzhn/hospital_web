@@ -14,8 +14,8 @@
     <header class="dashboard-topbar"><a class="dashboard-brand" href="panel-paciente.html"><span class="dashboard-brand-icon"><i class="fa-solid fa-heart-pulse"></i></span><span><strong>San Juan de Dios</strong><small>Portal del paciente</small></span></a><div class="dashboard-topbar-actions"><a href="panel-paciente.html" class="dashboard-user"><span class="dashboard-user-avatar"><i class="fa-solid fa-house"></i></span><span><strong>Mi portal</strong><small>Volver al resumen</small></span></a><button id="logoutButton" class="dashboard-logout" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar sesión</span></button></div></header>
     <div class="dashboard-shell"><aside class="dashboard-sidebar"><p class="dashboard-nav-label">MENÚ PRINCIPAL</p><nav class="dashboard-nav"><a href="panel-paciente.html"><i class="fa-solid fa-house"></i>Resumen</a><a class="active" href="reservar-cita.html"><i class="fa-solid fa-calendar-plus"></i>Reservar cita</a><a href="mis-citas.html"><i class="fa-solid fa-calendar-check"></i>Mis citas</a><a href="mis-recetas.html"><i class="fa-solid fa-prescription-bottle-medical"></i>Tratamientos</a><a href="mis-consultas.html"><i class="fa-solid fa-stethoscope"></i>Consultas</a><a href="mis-datos.html"><i class="fa-solid fa-user-pen"></i>Mis datos</a></nav></aside>
         <main class="dashboard-content"><section class="booking-heading"><a href="mis-citas.html"><i class="fa-solid fa-arrow-left"></i> Volver a mis citas</a><p class="dashboard-eyebrow" id="bookingEyebrow">RESERVA EN LÍNEA</p><h1 id="bookingTitle">Programa tu cita</h1><p id="bookingDescription">Elige la especialidad, profesional y horario que necesitas. Al confirmar, la cita quedará registrada en tu portal.</p></section>
-            <div class="booking-layout"><form id="bookingForm" class="booking-form-card"><div class="booking-step"><span>1</span><div><h2>Selecciona tu atención</h2><p>Indica la especialidad y profesional de preferencia.</p></div></div><div class="booking-fields"><label>Especialidad<select id="bookingSpecialty" required><option value="">Selecciona una especialidad</option><option>Medicina General</option><option>Cardiología</option><option>Odontología</option><option>Pediatría</option><option>Psicología</option><option>Nutrición</option></select></label><label>Profesional<select id="bookingDoctor" required><option value="">Selecciona una opción</option><option>Dr. Carlos Pérez</option><option>Dra. Ana Torres</option><option>Dr. Luis Ramírez</option></select></label></div><div class="booking-step"><span>2</span><div><h2>Elige fecha y hora</h2><p>Los horarios están sujetos a confirmación del centro.</p></div></div><div class="booking-fields"><label>Fecha<input id="bookingDate" type="date" required></label><label>Horario<select id="bookingTime" required><option value="">Selecciona una hora</option><option>08:00 a. m.</option><option>09:00 a. m.</option><option>10:00 a. m.</option><option>03:00 p. m.</option><option>04:00 p. m.</option></select></label></div><label class="booking-full">Motivo de consulta <textarea id="bookingReason" placeholder="Cuéntanos brevemente el motivo de tu cita (opcional)"></textarea></label><button class="booking-submit" type="submit"><i class="fa-solid fa-calendar-check"></i> Confirmar cita</button><p id="bookingStatus" class="booking-status" role="status"></p></form>
-                <aside class="booking-summary"><span class="booking-summary-icon"><i class="fa-solid fa-circle-info"></i></span><h2>Tu reserva segura</h2><p>Esta solicitud se guarda únicamente dentro de tu sesión del portal.</p><ul><li><i class="fa-solid fa-check"></i> Recibirás el detalle en “Mis citas”.</li><li><i class="fa-solid fa-check"></i> Verifica tus datos antes de confirmar.</li><li><i class="fa-solid fa-check"></i> Si necesitas cambiarla, comunícate con recepción.</li></ul></aside></div>
+            <div class="booking-layout"><form id="bookingForm" class="booking-form-card" novalidate><div class="booking-step"><span>1</span><div><h2>Selecciona tu atención</h2><p>Indica la especialidad y profesional de preferencia.</p></div></div><div class="booking-fields"><label>Especialidad<select id="bookingSpecialty" required><option value="">Selecciona una especialidad</option><option>Medicina General</option><option>Cardiología</option><option>Odontología</option><option>Pediatría</option><option>Psicología</option><option>Nutrición</option></select></label><label>Profesional<select id="bookingDoctor" required><option value="">Selecciona una opción</option><option>Dr. Carlos Pérez</option><option>Dra. Ana Torres</option><option>Dr. Luis Ramírez</option></select></label></div><div class="booking-step"><span>2</span><div><h2>Elige fecha y hora</h2><p>Solo se permiten fechas desde hoy. Los horarios están sujetos a confirmación.</p></div></div><div class="booking-fields"><label>Fecha<input id="bookingDate" type="date" required></label><label>Horario<select id="bookingTime" required><option value="">Selecciona una hora</option><option>08:00 a. m.</option><option>09:00 a. m.</option><option>10:00 a. m.</option><option>03:00 p. m.</option><option>04:00 p. m.</option></select></label></div><label class="booking-full">Motivo de consulta <textarea id="bookingReason" placeholder="Cuéntanos brevemente el motivo de tu cita (opcional)"></textarea></label><button id="bookingSubmit" class="booking-submit" type="submit"><i class="fa-solid fa-calendar-check"></i> Confirmar cita</button><p id="bookingStatus" class="booking-status" role="status" aria-live="polite"></p></form>
+                <aside class="booking-summary"><span class="booking-summary-icon"><i class="fa-solid fa-circle-info"></i></span><h2>Reserva con tranquilidad</h2><p>Al confirmar, se generará un código de solicitud y quedará registrada en tu portal y en recepción.</p><ul><li><i class="fa-solid fa-check"></i> Recibirás el detalle en “Mis citas”.</li><li><i class="fa-solid fa-check"></i> Verifica tus datos antes de confirmar.</li><li><i class="fa-solid fa-check"></i> Si necesitas cambiarla, puedes reprogramarla desde “Mis citas”.</li></ul><div class="booking-emergency"><i class="fa-solid fa-triangle-exclamation"></i><p><strong>¿Es una emergencia?</strong> No esperes una cita. Busca atención inmediata o llama al 106 (SAMU).</p></div></aside></div>
         </main></div>
     <script src="../js/google-sheets-config.js"></script>
     <script>
@@ -24,10 +24,18 @@
             if (!saved) { window.location.href = 'portal-paciente.html'; return; }
 
             const dateInput = document.getElementById('bookingDate');
-            dateInput.min = new Date().toISOString().split('T')[0];
+            const dateForInput = function (value) {
+                const offset = value.getTimezoneOffset() * 60000;
+                return new Date(value.getTime() - offset).toISOString().split('T')[0];
+            };
+            dateInput.min = dateForInput(new Date());
             const patient = JSON.parse(saved);
             const existing = patient.cita;
             const editing = new URLSearchParams(window.location.search).get('editar') === '1';
+            const form = document.getElementById('bookingForm');
+            const submitButton = document.getElementById('bookingSubmit');
+            const status = document.getElementById('bookingStatus');
+            let isSubmitting = false;
 
             if (editing && existing) {
                 document.getElementById('bookingEyebrow').textContent = 'REPROGRAMACIÓN';
@@ -52,7 +60,7 @@
                     const script = document.createElement('script');
                     const timeout = setTimeout(function () { cleanup(); resolve(false); }, 7000);
                     function cleanup() { clearTimeout(timeout); delete window[callback]; script.remove(); }
-                    window[callback] = function (data) { cleanup(); resolve(Boolean(data && data.ok)); };
+                    window[callback] = function (data) { cleanup(); resolve(data && data.ok ? data : null); };
                     script.onerror = function () { cleanup(); resolve(false); };
                     script.src = endpoint + '?action=estado_encuesta&codigo=' + encodeURIComponent(code) + '&callback=' + callback;
                     document.body.appendChild(script);
@@ -62,42 +70,83 @@
             async function waitForSheet(endpoint, code) {
                 for (let attempt = 0; attempt < 3; attempt += 1) {
                     await new Promise(function (resolve) { setTimeout(resolve, 1000); });
-                    if (await confirmInSheet(endpoint, code, attempt)) return true;
+                    const confirmation = await confirmInSheet(endpoint, code, attempt);
+                    if (confirmation) return confirmation;
                 }
                 return false;
             }
 
-            document.getElementById('bookingForm').addEventListener('submit', async function (event) {
+            form.addEventListener('submit', async function (event) {
                 event.preventDefault();
+                if (isSubmitting) return;
+                status.className = 'booking-status';
+                if (!form.checkValidity()) {
+                    status.textContent = 'Completa la especialidad, el profesional, la fecha y el horario.';
+                    status.classList.add('is-error');
+                    form.reportValidity();
+                    return;
+                }
                 if (editing && !window.confirm('Estás reprogramando una cita existente. ¿Deseas guardar estos cambios?')) return;
                 const currentPatient = JSON.parse(sessionStorage.getItem('sjdd_patient'));
+                if (!/^\d{8}$/.test(String(currentPatient.dni || ''))) {
+                    status.textContent = 'Tu DNI debe tener 8 dígitos. Actualízalo antes de reservar.';
+                    status.classList.add('is-error');
+                    return;
+                }
+                if (dateInput.value < dateInput.min) {
+                    status.textContent = 'Elige una fecha desde hoy en adelante.';
+                    status.classList.add('is-error');
+                    return;
+                }
                 const date = new Date(dateInput.value + 'T12:00:00');
                 const makeCode = function () { const values = new Uint32Array(4); crypto.getRandomValues(values); return `SJD-${Array.from(values).map(value => value.toString(36)).join('')}`; };
                 const appointmentCode = editing && existing && existing.codigo ? existing.codigo : makeCode();
+                const previousAppointment = currentPatient.cita;
                 currentPatient.cita = { codigo: appointmentCode, especialidad: document.getElementById('bookingSpecialty').value, medico: document.getElementById('bookingDoctor').value, fecha: date.toLocaleDateString('es-PE'), hora: document.getElementById('bookingTime').value, ubicacion: 'Por confirmar', estado: editing ? 'Reprogramada' : 'Solicitud registrada' };
                 sessionStorage.setItem('sjdd_patient', JSON.stringify(currentPatient));
 
-                const status = document.getElementById('bookingStatus');
+                isSubmitting = true;
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando solicitud…';
                 const endpoint = window.SJDD_GOOGLE_SHEETS_URL;
                 if (endpoint) {
                     status.textContent = 'Enviando solicitud al centro…';
                     try {
                         await fetch(endpoint, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: editing ? 'reprogramar' : 'crear', codigo: appointmentCode, paciente: currentPatient.nombre || 'Paciente', dni: currentPatient.dni || '', especialidad: currentPatient.cita.especialidad, profesional: currentPatient.cita.medico, fecha: currentPatient.cita.fecha, hora: currentPatient.cita.hora, estado: currentPatient.cita.estado }) });
                         status.textContent = 'Verificando el registro en Google Sheets…';
-                        if (!await waitForSheet(endpoint, appointmentCode)) {
+                        const confirmation = await waitForSheet(endpoint, appointmentCode);
+                        if (!confirmation) {
                             status.textContent = 'No se pudo confirmar el registro en Google Sheets. Revisa que Apps Script esté publicado con la versión más reciente e inténtalo nuevamente.';
+                            status.classList.add('is-error');
+                            if (previousAppointment) currentPatient.cita = previousAppointment; else delete currentPatient.cita;
+                            sessionStorage.setItem('sjdd_patient', JSON.stringify(currentPatient));
+                            isSubmitting = false;
+                            submitButton.disabled = false;
+                            submitButton.innerHTML = editing ? '<i class="fa-solid fa-calendar-check"></i> Guardar nueva programación' : '<i class="fa-solid fa-calendar-check"></i> Confirmar cita';
                             return;
                         }
-                        status.textContent = editing ? 'Cita reprogramada y confirmada. Te estamos llevando a tus citas…' : 'Solicitud registrada y confirmada. Te estamos llevando a tus citas…';
+                        if (confirmation.turno) {
+                            currentPatient.cita.turno = confirmation.turno;
+                            sessionStorage.setItem('sjdd_patient', JSON.stringify(currentPatient));
+                        }
+                        status.innerHTML = confirmation.turno ? `Solicitud registrada. Tu turno es <strong>${confirmation.turno.codigo}</strong>. Preparando tu ticket…` : `Solicitud registrada. Código: <strong>${appointmentCode}</strong>. Te estamos llevando a tus citas…`;
+                        status.classList.add('is-success');
                     } catch (error) {
                         status.textContent = 'No se pudo enviar la solicitud al centro. Revisa tu conexión e intenta nuevamente.';
+                        status.classList.add('is-error');
+                        if (previousAppointment) currentPatient.cita = previousAppointment; else delete currentPatient.cita;
+                        sessionStorage.setItem('sjdd_patient', JSON.stringify(currentPatient));
+                        isSubmitting = false;
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = editing ? '<i class="fa-solid fa-calendar-check"></i> Guardar nueva programación' : '<i class="fa-solid fa-calendar-check"></i> Confirmar cita';
                         return;
                     }
                 } else {
-                    status.textContent = 'Cita registrada en tu portal. La conexión con el centro se activará cuando se configure Google Sheets.';
+                    status.innerHTML = `Cita registrada en tu portal. Código: <strong>${appointmentCode}</strong>. La conexión con el centro se activará cuando se configure Google Sheets.`;
+                    status.classList.add('is-success');
                 }
 
-                setTimeout(function () { window.location.href = 'mis-citas.html'; }, 1200);
+                setTimeout(function () { window.location.href = currentPatient.cita.turno ? 'mi-turno.html' : 'mis-citas.html'; }, 1400);
             });
         });
     </script>

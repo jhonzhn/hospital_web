@@ -569,3 +569,33 @@ a {
 .portal-secondary-btn { min-height: 42px; padding: 10px 14px; color: var(--portal-primary); background: #fff; border: 1px solid #b7dce4; border-radius: 10px; font: inherit; font-size: .77rem; font-weight: 800; cursor: pointer; }.profile-status { min-height: 18px; margin-top: 12px; color: var(--portal-primary); font-size: .76rem; font-weight: 800; text-align: right; }
 .appointment-actions { display: flex; align-items: center; gap: 8px; white-space: nowrap; }.appointment-action { display: inline-flex; align-items: center; gap: 5px; min-height: 31px; padding: 6px 8px; border-radius: 7px; font: inherit; font-size: .69rem; font-weight: 800; cursor: pointer; }.appointment-action.edit { color: var(--portal-primary); background: var(--portal-light); }.appointment-action.cancel { color: #a23a31; background: #fff1ef; border: 0; }
 @media (max-width: 650px) { .form-grid { grid-template-columns: 1fr; }.portal-form-group.full { grid-column: auto; }.profile-actions { flex-direction: column-reverse; }.profile-actions > * { width: 100%; }.profile-status { text-align: center; } }
+
+/* Estados y confirmación de reserva */
+.booking-submit:disabled { cursor: wait; opacity: .72; }
+.booking-status.is-error { color: #ad3930; }
+.booking-status.is-success { color: #13735f; }
+.booking-emergency { display: flex; gap: 9px; margin-top: 20px; padding: 12px; color: #805018; background: #fff8e8; border: 1px solid #f1dca4; border-radius: 11px; }
+.booking-emergency i { margin-top: 2px; color: #ba7815; }
+.booking-emergency p { font-size: .72rem; line-height: 1.45; }
+.booking-emergency strong { display: block; color: #714214; }
+.status-badge.status-registered { color: #096d8b; background: #e6f5fa; }
+.status-badge.status-reprogrammed { color: #93600b; background: #fff3d8; }
+.status-badge.status-attended { color: #147457; background: #e7f7ef; }
+.status-badge.status-cancelled { color: #a23a31; background: #fff0ee; }
+.appointment-action.ticket { color: #785208; background: #fff3d8; }
+
+/* Ticket digital de turnos */
+.ticket-page { width: min(100% - 32px, 680px); margin: 0 auto; padding: 42px 0 64px; }
+.ticket-card { overflow: hidden; background: #fff; border: 1px solid var(--portal-border); border-radius: 20px; box-shadow: 0 14px 38px rgba(23,49,58,.08); }
+.ticket-top { display: flex; justify-content: space-between; gap: 14px; padding: 18px 22px; color: #fff; background: linear-gradient(125deg, #176b87, #087f8c); font-size: .72rem; font-weight: 800; letter-spacing: .04em; }
+.ticket-top small { color: rgba(255,255,255,.76); font-size: .62rem; }
+.ticket-body { padding: 34px; text-align: center; }
+.ticket-code { display: block; margin: 8px 0 13px; color: var(--portal-primary); font-family: var(--portal-title); font-size: clamp(3rem, 12vw, 5.5rem); letter-spacing: .05em; line-height: 1; }
+.ticket-status { display: inline-flex; gap: 7px; align-items: center; padding: 7px 10px; color: #8c5b0a; background: #fff3d8; border-radius: 40px; font-size: .75rem; font-weight: 800; }
+.ticket-details { display: grid; grid-template-columns: repeat(2, 1fr); margin-top: 28px; border-top: 1px dashed var(--portal-border); border-left: 1px dashed var(--portal-border); text-align: left; }
+.ticket-details > div { padding: 15px; border-right: 1px dashed var(--portal-border); border-bottom: 1px dashed var(--portal-border); }.ticket-details span, .ticket-details strong { display: block; }.ticket-details span { color: var(--portal-muted); font-size: .68rem; }.ticket-details strong { margin-top: 4px; color: var(--portal-dark); font-size: .8rem; }
+.ticket-person { margin-top: 22px; color: var(--portal-muted); font-size: .74rem; }
+.ticket-actions { display: flex; justify-content: center; gap: 11px; margin-top: 18px; }.ticket-actions .portal-primary-btn { border: 0; cursor: pointer; }.ticket-actions .portal-outline-btn { justify-content: center; }
+.ticket-note { margin: 18px auto 0; color: var(--portal-muted); font-size: .74rem; line-height: 1.55; text-align: center; }.ticket-note i { margin-right: 5px; color: var(--portal-primary); }
+.ticket-loading { display: grid; place-items: center; min-height: 280px; padding: 30px; color: var(--portal-muted); text-align: center; }.ticket-loading i { margin-bottom: 12px; color: var(--portal-primary); font-size: 1.65rem; }.ticket-loading h1 { color: var(--portal-dark); font-size: 1.25rem; }.ticket-loading p { margin-top: 7px; font-size: .82rem; }
+@media (max-width: 520px) { .ticket-body { padding: 26px 18px; }.ticket-top { display: grid; }.ticket-details { grid-template-columns: 1fr; }.ticket-actions { display: grid; }.ticket-actions > * { width: 100%; justify-content: center; } }

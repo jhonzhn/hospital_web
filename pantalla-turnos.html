@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Pantalla de turnos | San Juan de Dios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;700;800&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/turnos.css">
+</head>
+<body>
+    <main class="queue-screen">
+        <header class="queue-header"><div class="queue-brand"><img src="img/logo-sjd-pisco-circle.png" alt=""><div><strong>Centro de Salud San Juan de Dios</strong><span>Sala de espera · Turnos en línea</span></div></div><div class="queue-clock"><span id="queueDate"></span><strong id="queueTime"></strong></div></header>
+        <section class="queue-main" aria-live="polite"><p class="queue-label">ATENDIENDO AHORA</p><div id="currentTurn" class="current-turn"><span class="queue-empty"><i class="fa-regular fa-clock"></i> Esperando el llamado de recepción</span></div><p id="currentDetails" class="queue-details"></p></section>
+        <section class="queue-next"><p class="queue-label">SIGUIENTE TURNO</p><div id="nextTurn" class="next-turn">—</div><p id="nextDetails"></p></section>
+        <footer class="queue-footer"><span><i class="fa-solid fa-circle-info"></i> Acércate a recepción con tu ticket digital cuando seas llamado.</span><button id="fullscreenButton" type="button"><i class="fa-solid fa-expand"></i> Pantalla completa</button></footer>
+    </main>
+    <script src="js/google-sheets-config.js"></script>
+    <script>
+        (function () {
+            const dateFormatter = new Intl.DateTimeFormat('es-PE', { timeZone: 'America/Lima', day: '2-digit', month: 'long', year: 'numeric' });
+            const timeFormatter = new Intl.DateTimeFormat('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit' });
+            const queueDate = document.getElementById('queueDate');
+            const queueTime = document.getElementById('queueTime');
+
+            function todayForSheet() {
+                const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Lima', day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(new Date());
+                const values = Object.fromEntries(parts.filter(part => part.type !== 'literal').map(part => [part.type, part.value]));
+                return values.day + '/' + values.month + '/' + values.year;
+            }
+            function updateClock() { const now = new Date(); queueDate.textContent = dateFormatter.format(now); queueTime.textContent = timeFormatter.format(now); }
+            function callEndpoint() {
+                const endpoint = window.SJDD_GOOGLE_SHEETS_URL;
+                if (!endpoint) return;
+                const callback = '__sjddQueue' + Date.now();
+                const script = document.createElement('script');
+                const timeout = setTimeout(cleanup, 10000);
+                function cleanup() { clearTimeout(timeout); delete window[callback]; script.remove(); }
+                window[callback] = function (data) { cleanup(); render(data); };
+                script.onerror = cleanup;
+                script.src = endpoint + '?action=pantalla_turnos&fecha=' + encodeURIComponent(todayForSheet()) + '&callback=' + callback;
+                document.body.appendChild(script);
+            }
+            function render(data) {
+                const current = data && data.actual;
+                const next = data && data.siguiente;
+                document.getElementById('currentTurn').innerHTML = current ? '<strong>' + current.codigo + '</strong>' : '<span class="queue-empty"><i class="fa-regular fa-clock"></i> Esperando el llamado de recepción</span>';
+                document.getElementById('currentDetails').textContent = current ? current.especialidad + ' · ' + current.consultorio : '';
+                document.getElementById('nextTurn').textContent = next ? next.codigo : '—';
+                document.getElementById('nextDetails').textContent = next ? next.especialidad + ' · Hora: ' + next.hora : 'No hay turnos pendientes para hoy';
+            }
+            document.getElementById('fullscreenButton').addEventListener('click', function () { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); });
+            updateClock(); callEndpoint(); setInterval(updateClock, 1000); setInterval(callEndpoint, 10000);
+        }());
+    </script>
+</body>
+</html>
