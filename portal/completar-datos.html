@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completa tus datos | Portal del Paciente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/portal.css">
+</head>
+<body class="patient-dashboard">
+    <header class="dashboard-topbar"><a class="dashboard-brand" href="panel-paciente.html"><span class="dashboard-brand-icon"><i class="fa-solid fa-heart-pulse"></i></span><span><strong>San Juan de Dios</strong><small>Portal del paciente</small></span></a><div class="dashboard-topbar-actions"><button id="logoutButton" class="dashboard-logout" type="button"><i class="fa-solid fa-right-from-bracket"></i><span>Cerrar sesión</span></button></div></header>
+    <main class="patient-details-page">
+        <a href="panel-paciente.html" class="booking-back"><i class="fa-solid fa-arrow-left"></i> Volver al resumen</a>
+        <section class="patient-details-card">
+            <div class="patient-details-heading"><span class="details-icon"><i class="fa-solid fa-user-pen"></i></span><div><p class="dashboard-eyebrow">ANTES DE RESERVAR</p><h1>Completa tus datos</h1><p>Necesitamos esta información para registrar correctamente tu cita. El correo y la dirección son opcionales.</p></div></div>
+            <form id="patientDetailsForm" class="patient-details-form">
+                <label>Nombre completo <input id="detailsName" type="text" autocomplete="name" placeholder="Ejemplo: María López" required></label>
+                <label>DNI <input id="detailsDni" type="text" inputmode="numeric" readonly></label>
+                <label>Teléfono <input id="detailsPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="Ejemplo: 987654321" pattern="[0-9]{9}" required><small>Ingresa 9 dígitos.</small></label>
+                <label>Correo electrónico <span class="optional">Opcional</span><input id="detailsEmail" type="email" autocomplete="email" placeholder="nombre@correo.com"></label>
+                <label class="details-full">Dirección <span class="optional">Opcional</span><input id="detailsAddress" type="text" autocomplete="street-address" placeholder="Ejemplo: Calle Principal 123, Pisco"></label>
+                <button class="booking-submit details-submit" type="submit"><i class="fa-solid fa-check"></i> Guardar y continuar</button>
+                <p id="detailsStatus" class="booking-status" role="status"></p>
+            </form>
+        </section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const saved = sessionStorage.getItem('sjdd_patient');
+            if (!saved) { window.location.href = 'portal-paciente.html'; return; }
+            const patient = JSON.parse(saved);
+            const form = document.getElementById('patientDetailsForm');
+            const returnTo = new URLSearchParams(window.location.search).get('volver') === 'reservar-cita.html' ? 'reservar-cita.html' : 'panel-paciente.html';
+            document.getElementById('detailsName').value = patient.nombre === 'Paciente' ? '' : (patient.nombre || '');
+            document.getElementById('detailsDni').value = patient.dni || '';
+            document.getElementById('detailsPhone').value = patient.telefono || '';
+            document.getElementById('detailsEmail').value = patient.correo || '';
+            document.getElementById('detailsAddress').value = patient.direccion || '';
+            document.getElementById('logoutButton').addEventListener('click', function () { sessionStorage.removeItem('sjdd_patient'); window.location.href = 'portal-paciente.html'; });
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const status = document.getElementById('detailsStatus');
+                if (!form.checkValidity()) { status.textContent = 'Completa tu nombre y un teléfono válido de 9 dígitos.'; status.className = 'booking-status is-error'; form.reportValidity(); return; }
+                patient.nombre = document.getElementById('detailsName').value.trim();
+                patient.telefono = document.getElementById('detailsPhone').value.trim();
+                patient.correo = document.getElementById('detailsEmail').value.trim();
+                patient.direccion = document.getElementById('detailsAddress').value.trim();
+                sessionStorage.setItem('sjdd_patient', JSON.stringify(patient));
+                status.textContent = 'Datos guardados. Continuando con tu reserva…'; status.className = 'booking-status is-success';
+                setTimeout(function () { window.location.href = returnTo; }, 600);
+            });
+        });
+    </script>
+</body>
+</html>
