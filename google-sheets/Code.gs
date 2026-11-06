@@ -5,6 +5,9 @@
 const SHEET_NAME = 'Citas';
 const SURVEY_SHEET_NAME = 'Encuestas';
 const TURN_SHEET_NAME = 'Turnos';
+const PATIENT_SHEET_NAME = 'Pacientes';
+const ADMIN_PASSWORD_PROPERTY = 'SJD_ADMIN_PASSWORD';
+const ADMIN_SESSION_PREFIX = 'sjdd_admin_session_';
 
 function setupSheet() {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -26,14 +29,36 @@ function setupSheet() {
     sheet.setFrozenRows(1);
   }
 
+  ensureAppointmentColumns(sheet);
   applyAppointmentFormatting(sheet);
 
   setupSurveySheet();
   setupTurnSheet();
+  setupPatientSheet();
+}
+
+function setupPatientSheet() {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = spreadsheet.getSheetByName(PATIENT_SHEET_NAME);
+  if (!sheet) sheet = spreadsheet.insertSheet(PATIENT_SHEET_NAME);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['Fecha de registro', 'Nombres', 'Apellidos', 'DNI', 'Seguro', 'Fecha de nacimiento', 'Teléfono', 'Registrado por']);
+    sheet.setFrozenRows(1);
+  }
+  sheet.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#0284c7').setFontColor('#ffffff');
+}
+
+function ensureAppointmentColumns(sheet) {
+  const extraHeaders = ['Comentario de recepción', 'Fecha de actualización', 'Actualizado por'];
+  const currentHeaders = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 9)).getValues()[0];
+  extraHeaders.forEach((header, index) => {
+    const column = 10 + index;
+    if (!currentHeaders[column - 1]) sheet.getRange(1, column).setValue(header);
+  });
 }
 
 function applyAppointmentFormatting(sheet) {
-  sheet.getRange(1, 1, 1, 9).setFontWeight('bold').setBackground('#078b9a').setFontColor('#ffffff');
+  sheet.getRange(1, 1, 1, 12).setFontWeight('bold').setBackground('#078b9a').setFontColor('#ffffff');
   const stateRange = sheet.getRange(2, 9, Math.max(sheet.getMaxRows() - 1, 1), 1);
   const rules = [
     SpreadsheetApp.newConditionalFormatRule().whenTextEqualTo('Solicitud registrada').setBackground('#e5f5f8').setFontColor('#096d8b').setRanges([stateRange]).build(),
@@ -210,7 +235,168 @@ function jsonOutput(payload, callback) {
     .setMimeType(safeCallback ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
 }
 
+// Funciones internas para el panel de personal. Solo se invocan desde la
+// página servida por Apps Script después de iniciar sesión.
+function renderAdminPanel() {
+  return HtmlService.createHtmlOutputFromFile('Admin')
+    .setTitle('Panel de personal | San Juan de Dios');
+}
+
+function adminLogin(name, password) {
+  const configuredPassword = PropertiesService.getScriptProperties().getProperty(ADMIN_PASSWORD_PROPERTY);
+  if (!configuredPassword) throw new Error('Primero configura la contraseña del personal en las propiedades del proyecto.');
+  if (String(password || '') !== configuredPassword) throw new Error('La contraseña no es correcta.');
+
+  const token = Utilities.getUuid();
+  const staff = { name: String(name || 'Personal de recepción').trim().slice(0, 80) };
+  CacheService.getScriptCache().put(ADMIN_SESSION_PREFIX + token, JSON.stringify(staff), 21600);
+  return { token: token, staff: staff };
+}
+
+function requireAdminSession(token) {
+  const saved = CacheService.getScriptCache().get(ADMIN_SESSION_PREFIX + String(token || ''));
+  if (!saved) throw new Error('Tu sesión venció. Ingresa nuevamente.');
+  return JSON.parse(saved);
+}
+
+function adminLogout(token) {
+  CacheService.getScriptCache().remove(ADMIN_SESSION_PREFIX + String(token || ''));
+  return { ok: true };
+}
+
+function adminListAppointments(token, date) {
+  requireAdminSession(token);
+  setupSheet();
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+  const turnSheet = spreadsheet.getSheetByName(TURN_SHEET_NAME);
+  const targetDate = String(date || '');
+  if (sheet.getLastRow() < 2) return [];
+
+  return sheet.getRange(2, 1, sheet.getLastRow() - 1, 12).getValues()
+    .filter(row => !targetDate || normalizedAppointmentDate(row[6]) === normalizedAppointmentDate(targetDate))
+    .map(row => ({
+      codigo: String(row[1]),
+      paciente: String(row[2] || 'Paciente'),
+      dni: String(row[3] || ''),
+      especialidad: String(row[4] || ''),
+      profesional: String(row[5] || ''),
+      fecha: normalizedAppointmentDate(row[6]),
+      hora: String(row[7] || ''),
+      estado: String(row[8] || 'Solicitud registrada'),
+      comentario: String(row[9] || ''),
+      actualizado: row[10] instanceof Date ? Utilities.formatDate(row[10], spreadsheet.getSpreadsheetTimeZone(), 'd/M/yyyy HH:mm') : String(row[10] || ''),
+      actualizadoPor: String(row[11] || ''),
+      turno: getTurn(turnSheet, row[1])
+    }))
+    .sort((a, b) => appointmentMinutes(a.hora) - appointmentMinutes(b.hora));
+}
+
+function adminListPatients(token) {
+  requireAdminSession(token);
+  setupSheet();
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(PATIENT_SHEET_NAME);
+  if (sheet.getLastRow() < 2) return [];
+  return sheet.getRange(2, 1, sheet.getLastRow() - 1, 8).getValues().map(row => ({
+    fecha: row[0] instanceof Date ? Utilities.formatDate(row[0], SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), 'd/M/yyyy') : String(row[0] || ''),
+    nombres: String(row[1] || ''),
+    apellidos: String(row[2] || ''),
+    dni: String(row[3] || ''),
+    seguro: String(row[4] || ''),
+    nacimiento: row[5] instanceof Date ? Utilities.formatDate(row[5], SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), 'd/M/yyyy') : String(row[5] || ''),
+    telefono: String(row[6] || '')
+  })).reverse();
+}
+
+function adminRegisterPatient(token, data) {
+  const staff = requireAdminSession(token);
+  const dni = String(data.dni || '').trim();
+  const phone = String(data.telefono || '').trim();
+  if (!String(data.nombres || '').trim() || !String(data.apellidos || '').trim()) throw new Error('Completa los nombres y apellidos.');
+  if (!validDni(dni)) throw new Error('El DNI debe tener 8 dígitos.');
+  if (!/^9\d{8}$/.test(phone)) throw new Error('El teléfono debe tener 9 dígitos y empezar con 9.');
+  if (!String(data.nacimiento || '').trim()) throw new Error('Selecciona la fecha de nacimiento.');
+
+  setupSheet();
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(PATIENT_SHEET_NAME);
+  const existingDnis = sheet.getLastRow() < 2 ? [] : sheet.getRange(2, 4, sheet.getLastRow() - 1, 1).getValues();
+  if (existingDnis.some(row => String(row[0]) === dni)) throw new Error('Ya existe un paciente registrado con este DNI.');
+
+  sheet.appendRow([
+    new Date(), String(data.nombres).trim(), String(data.apellidos).trim(), dni,
+    String(data.seguro || 'SIS'), String(data.nacimiento || ''), phone, staff.name
+  ]);
+  return { ok: true };
+}
+
+function adminUpdateAppointment(token, payload) {
+  const staff = requireAdminSession(token);
+  setupSheet();
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(SHEET_NAME);
+  const turnSheet = spreadsheet.getSheetByName(TURN_SHEET_NAME);
+  const code = String(payload.codigo || '');
+  const rowNumber = findAppointmentRow(sheet, code);
+  if (rowNumber === -1) throw new Error('No se encontró la cita seleccionada.');
+
+  const current = sheet.getRange(rowNumber, 1, 1, 12).getValues()[0];
+  const action = String(payload.accion || '');
+  const comment = String(payload.comentario || '').trim().slice(0, 500);
+  const turnRow = findTurnRow(turnSheet, code);
+
+  if (action === 'cancelar') {
+    if (!comment) throw new Error('Escribe el motivo de la cancelación.');
+    sheet.getRange(rowNumber, 9).setValue('Cancelada');
+    if (turnRow !== -1) turnSheet.getRange(turnRow, 7).setValue('Cancelada');
+  } else if (action === 'atender') {
+    sheet.getRange(rowNumber, 9).setValue('Atendida');
+    if (turnRow !== -1) turnSheet.getRange(turnRow, 7).setValue('Atendido');
+  } else if (action === 'llamar') {
+    const consultorio = String(payload.consultorio || '').trim().slice(0, 80);
+    if (turnRow === -1) throw new Error('Esta cita no tiene un turno asociado.');
+    turnSheet.getRange(turnRow, 7).setValue('Llamando');
+    if (consultorio) turnSheet.getRange(turnRow, 8).setValue(consultorio);
+  } else if (action === 'reprogramar') {
+    const newData = {
+      codigo: code,
+      dni: String(current[3]),
+      especialidad: String(payload.especialidad || ''),
+      profesional: String(payload.profesional || ''),
+      fecha: String(payload.fecha || ''),
+      hora: String(payload.hora || '')
+    };
+    validateAppointment(newData);
+    if (!comment) throw new Error('Explica brevemente el motivo de la reprogramación.');
+    if (hasActiveDuplicate(sheet, newData.dni, newData.fecha, newData.especialidad, code)) {
+      throw new Error('El paciente ya tiene una cita activa para esa fecha y especialidad.');
+    }
+    sheet.getRange(rowNumber, 5, 1, 5).setValues([[
+      newData.especialidad,
+      newData.profesional,
+      newData.fecha,
+      newData.hora,
+      'Reprogramada'
+    ]]);
+    if (turnRow !== -1) {
+      turnSheet.getRange(turnRow, 3, 1, 5).setValues([[
+        nextTurnCode(turnSheet, newData.especialidad, newData.fecha),
+        newData.especialidad,
+        newData.fecha,
+        newData.hora,
+        'En espera'
+      ]]);
+    }
+  } else {
+    throw new Error('Acción de administración no válida.');
+  }
+
+  if (action !== 'llamar' || comment) sheet.getRange(rowNumber, 10).setValue(comment);
+  sheet.getRange(rowNumber, 11, 1, 2).setValues([[new Date(), staff.name]]);
+  return { ok: true };
+}
+
 function doGet(event) {
+  if (event && event.parameter && event.parameter.view === 'personal') return renderAdminPanel();
   try {
     const data = event.parameter || {};
     setupSheet();
