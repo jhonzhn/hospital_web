@@ -53,7 +53,8 @@
                 document.getElementById('nextDetails').textContent = next ? next.especialidad + ' · Hora: ' + next.hora : 'No hay turnos pendientes para hoy';
             }
             document.getElementById('fullscreenButton').addEventListener('click', function () { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); });
-            updateClock(); callEndpoint(); setInterval(updateClock, 1000); setInterval(callEndpoint, 10000);
+            updateClock(); callEndpoint(); setInterval(updateClock, 1000); setInterval(callEndpoint, 3000);
+            window.addEventListener('focus', callEndpoint);
         }());
     </script>
 </body>
