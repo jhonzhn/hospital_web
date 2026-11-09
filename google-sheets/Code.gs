@@ -6,6 +6,7 @@ const SHEET_NAME = 'Citas';
 const SURVEY_SHEET_NAME = 'Encuestas';
 const TURN_SHEET_NAME = 'Turnos';
 const PATIENT_SHEET_NAME = 'Pacientes';
+const EMERGENCY_SHEET_NAME = 'Emergencias';
 const ADMIN_PASSWORD_PROPERTY = 'SJD_ADMIN_PASSWORD';
 const ADMIN_SESSION_PREFIX = 'sjdd_admin_session_';
 
@@ -35,6 +36,7 @@ function setupSheet() {
   setupSurveySheet();
   setupTurnSheet();
   setupPatientSheet();
+  setupEmergencySheet();
 }
 
 function setupPatientSheet() {
@@ -46,6 +48,26 @@ function setupPatientSheet() {
     sheet.setFrozenRows(1);
   }
   sheet.getRange(1, 1, 1, 8).setFontWeight('bold').setBackground('#0284c7').setFontColor('#ffffff');
+}
+
+function setupEmergencySheet() {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = spreadsheet.getSheetByName(EMERGENCY_SHEET_NAME);
+  if (!sheet) sheet = spreadsheet.insertSheet(EMERGENCY_SHEET_NAME);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow([
+      'Fecha de registro', 'Código', 'Paciente', 'DNI', 'Motivo',
+      'Prioridad', 'Hora de llegada', 'Estado', 'Observaciones',
+      'Registrado por', 'Fecha de actualización'
+    ]);
+    sheet.setFrozenRows(1);
+  }
+  sheet.getRange(1, 1, 1, 11).setFontWeight('bold').setBackground('#dc2626').setFontColor('#ffffff');
+  const stateRange = sheet.getRange(2, 8, Math.max(sheet.getMaxRows() - 1, 1), 1);
+  stateRange.setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInList(['En espera', 'En atención', 'Atendida'], true)
+    .setAllowInvalid(false)
+    .build());
 }
 
 function ensureAppointmentColumns(sheet) {
@@ -156,7 +178,9 @@ function normalizedAppointmentDate(value) {
   if (value instanceof Date && !isNaN(value.getTime())) {
     return Utilities.formatDate(value, SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone(), 'd/M/yyyy');
   }
-  return String(value || '').trim();
+  const text = String(value || '').trim();
+  const match = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  return match ? `${Number(match[1])}/${Number(match[2])}/${match[3]}` : text;
 }
 
 function nextTurnCode(turnSheet, specialty, appointmentDate) {
@@ -180,6 +204,36 @@ function getTurn(turnSheet, appointmentCode) {
   if (row === -1) return null;
   const values = turnSheet.getRange(row, 1, 1, 8).getValues()[0];
   return { codigo: String(values[2]), especialidad: String(values[3]), fecha: normalizedAppointmentDate(values[4]), hora: String(values[5]), estado: String(values[6]), consultorio: String(values[7] || 'Por confirmar') };
+}
+
+function createTurnIfMissing(turnSheet, appointment) {
+  const existing = findTurnRow(turnSheet, appointment.codigo);
+  if (existing !== -1) return getTurn(turnSheet, appointment.codigo);
+  turnSheet.appendRow([
+    new Date(),
+    String(appointment.codigo || ''),
+    nextTurnCode(turnSheet, appointment.especialidad, appointment.fecha),
+    String(appointment.especialidad || ''),
+    String(appointment.fecha || ''),
+    String(appointment.hora || ''),
+    'En espera',
+    'Por confirmar'
+  ]);
+  return getTurn(turnSheet, appointment.codigo);
+}
+
+function rescheduleTurn(turnSheet, appointment) {
+  const row = findTurnRow(turnSheet, appointment.codigo);
+  if (row === -1) return createTurnIfMissing(turnSheet, appointment);
+  turnSheet.getRange(row, 3, 1, 6).setValues([[
+    nextTurnCode(turnSheet, appointment.especialidad, appointment.fecha),
+    String(appointment.especialidad || ''),
+    String(appointment.fecha || ''),
+    String(appointment.hora || ''),
+    'En espera',
+    'Por confirmar'
+  ]]);
+  return getTurn(turnSheet, appointment.codigo);
 }
 
 function publicTurn(values) {
@@ -276,6 +330,7 @@ function adminListAppointments(token, date) {
   return sheet.getRange(2, 1, sheet.getLastRow() - 1, 12).getValues()
     .filter(row => !targetDate || normalizedAppointmentDate(row[6]) === normalizedAppointmentDate(targetDate))
     .map(row => ({
+      registro: row[0] instanceof Date ? Utilities.formatDate(row[0], spreadsheet.getSpreadsheetTimeZone(), 'd/M/yyyy HH:mm') : String(row[0] || ''),
       codigo: String(row[1]),
       paciente: String(row[2] || 'Paciente'),
       dni: String(row[3] || ''),
@@ -329,6 +384,83 @@ function adminRegisterPatient(token, data) {
   return { ok: true };
 }
 
+function emergencyPriorityRank(priority) {
+  return { 'Crítica': 1, 'Urgente': 2, 'Prioritaria': 3, 'No urgente': 4 }[String(priority || '')] || 5;
+}
+
+function nextEmergencyCode(sheet) {
+  if (sheet.getLastRow() < 2) return 'EMG-001';
+  const codes = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
+  const max = codes.reduce((highest, row) => {
+    const match = String(row[0] || '').match(/^EMG-(\d+)$/);
+    return match ? Math.max(highest, Number(match[1])) : highest;
+  }, 0);
+  return `EMG-${String(max + 1).padStart(3, '0')}`;
+}
+
+function adminListEmergencies(token) {
+  requireAdminSession(token);
+  setupSheet();
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(EMERGENCY_SHEET_NAME);
+  if (sheet.getLastRow() < 2) return [];
+  return sheet.getRange(2, 1, sheet.getLastRow() - 1, 11).getValues().map(row => ({
+    fecha: row[0] instanceof Date ? Utilities.formatDate(row[0], spreadsheet.getSpreadsheetTimeZone(), 'd/M/yyyy') : String(row[0] || ''),
+    codigo: String(row[1] || ''),
+    paciente: String(row[2] || ''),
+    dni: String(row[3] || ''),
+    motivo: String(row[4] || ''),
+    prioridad: String(row[5] || ''),
+    hora: String(row[6] || ''),
+    estado: String(row[7] || 'En espera'),
+    observaciones: String(row[8] || ''),
+    registradoPor: String(row[9] || ''),
+    actualizado: row[10] instanceof Date ? Utilities.formatDate(row[10], spreadsheet.getSpreadsheetTimeZone(), 'd/M/yyyy HH:mm') : String(row[10] || '')
+  })).sort((a, b) => emergencyPriorityRank(a.prioridad) - emergencyPriorityRank(b.prioridad));
+}
+
+function adminCreateEmergency(token, data) {
+  const staff = requireAdminSession(token);
+  const patient = String(data.paciente || '').trim().slice(0, 120);
+  const dni = String(data.dni || '').trim();
+  const motive = String(data.motivo || '').trim().slice(0, 500);
+  const priority = String(data.prioridad || 'No urgente');
+  const note = String(data.observaciones || '').trim().slice(0, 500);
+  if (!patient) throw new Error('Escribe el nombre del paciente.');
+  if (!validDni(dni)) throw new Error('El DNI debe tener 8 dígitos.');
+  if (!motive) throw new Error('Describe brevemente el motivo de atención.');
+  if (!['Crítica', 'Urgente', 'Prioritaria', 'No urgente'].includes(priority)) throw new Error('Selecciona una prioridad válida.');
+
+  setupSheet();
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(EMERGENCY_SHEET_NAME);
+  const now = new Date();
+  const hour = Utilities.formatDate(now, spreadsheet.getSpreadsheetTimeZone(), 'HH:mm');
+  sheet.appendRow([now, nextEmergencyCode(sheet), patient, dni, motive, priority, hour, 'En espera', note, staff.name, now]);
+  return { ok: true };
+}
+
+function adminUpdateEmergency(token, payload) {
+  const staff = requireAdminSession(token);
+  setupSheet();
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(EMERGENCY_SHEET_NAME);
+  const code = String(payload.codigo || '');
+  if (!code || sheet.getLastRow() < 2) throw new Error('No se encontró la atención de emergencia.');
+  const codes = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
+  const index = codes.findIndex(row => String(row[0]) === code);
+  if (index === -1) throw new Error('No se encontró la atención de emergencia.');
+  const row = index + 2;
+  const action = String(payload.accion || '');
+  const status = action === 'iniciar' ? 'En atención' : action === 'finalizar' ? 'Atendida' : '';
+  if (!status) throw new Error('Acción de emergencia no válida.');
+  sheet.getRange(row, 8).setValue(status);
+  const note = String(payload.observaciones || '').trim().slice(0, 500);
+  if (note) sheet.getRange(row, 9).setValue(note);
+  sheet.getRange(row, 10, 1, 2).setValues([[staff.name, new Date()]]);
+  return { ok: true };
+}
+
 function adminUpdateAppointment(token, payload) {
   const staff = requireAdminSession(token);
   setupSheet();
@@ -342,7 +474,7 @@ function adminUpdateAppointment(token, payload) {
   const current = sheet.getRange(rowNumber, 1, 1, 12).getValues()[0];
   const action = String(payload.accion || '');
   const comment = String(payload.comentario || '').trim().slice(0, 500);
-  const turnRow = findTurnRow(turnSheet, code);
+  let turnRow = findTurnRow(turnSheet, code);
 
   if (action === 'cancelar') {
     if (!comment) throw new Error('Escribe el motivo de la cancelación.');
@@ -353,7 +485,15 @@ function adminUpdateAppointment(token, payload) {
     if (turnRow !== -1) turnSheet.getRange(turnRow, 7).setValue('Atendido');
   } else if (action === 'llamar') {
     const consultorio = String(payload.consultorio || '').trim().slice(0, 80);
-    if (turnRow === -1) throw new Error('Esta cita no tiene un turno asociado.');
+    if (turnRow === -1) {
+      createTurnIfMissing(turnSheet, {
+        codigo: code,
+        especialidad: String(current[4] || ''),
+        fecha: String(current[6] || ''),
+        hora: String(current[7] || '')
+      });
+      turnRow = findTurnRow(turnSheet, code);
+    }
     turnSheet.getRange(turnRow, 7).setValue('Llamando');
     if (consultorio) turnSheet.getRange(turnRow, 8).setValue(consultorio);
   } else if (action === 'reprogramar') {
@@ -377,15 +517,7 @@ function adminUpdateAppointment(token, payload) {
       newData.hora,
       'Reprogramada'
     ]]);
-    if (turnRow !== -1) {
-      turnSheet.getRange(turnRow, 3, 1, 5).setValues([[
-        nextTurnCode(turnSheet, newData.especialidad, newData.fecha),
-        newData.especialidad,
-        newData.fecha,
-        newData.hora,
-        'En espera'
-      ]]);
-    }
+    rescheduleTurn(turnSheet, newData);
   } else {
     throw new Error('Acción de administración no válida.');
   }
@@ -490,17 +622,12 @@ function doPost(event) {
           String(data.hora || ''),
           'Reprogramada'
         ]]);
-        const turnRow = findTurnRow(turnSheet, appointmentCode);
-        if (turnRow !== -1) {
-          const newTurnCode = nextTurnCode(turnSheet, data.especialidad, data.fecha);
-          turnSheet.getRange(turnRow, 3, 1, 5).setValues([[
-            newTurnCode,
-            String(data.especialidad || ''),
-            String(data.fecha || ''),
-            String(data.hora || ''),
-            'En espera'
-          ]]);
-        }
+        rescheduleTurn(turnSheet, {
+          codigo: appointmentCode,
+          especialidad: String(data.especialidad || ''),
+          fecha: String(data.fecha || ''),
+          hora: String(data.hora || '')
+        });
       }
 
       return ContentService
@@ -512,13 +639,12 @@ function doPost(event) {
     const existingRow = findAppointmentRow(sheet, appointmentCode);
     // Si se reintenta una reserva por una conexión lenta, no se duplica la fila.
     if (existingRow !== -1) {
-      if (findTurnRow(turnSheet, appointmentCode) === -1) {
-        turnSheet.appendRow([
-          new Date(), appointmentCode, nextTurnCode(turnSheet, data.especialidad, data.fecha),
-          String(data.especialidad || ''), String(data.fecha || ''), String(data.hora || ''),
-          'En espera', 'Por confirmar'
-        ]);
-      }
+      createTurnIfMissing(turnSheet, {
+        codigo: appointmentCode,
+        especialidad: String(data.especialidad || ''),
+        fecha: String(data.fecha || ''),
+        hora: String(data.hora || '')
+      });
       return ContentService
         .createTextOutput(JSON.stringify({ ok: true, action: 'crear', alreadyRegistered: true }))
         .setMimeType(ContentService.MimeType.JSON);
@@ -540,17 +666,12 @@ function doPost(event) {
       String(data.estado || 'Solicitud registrada')
     ]);
 
-    const turnCode = nextTurnCode(turnSheet, data.especialidad, data.fecha);
-    turnSheet.appendRow([
-      new Date(),
-      appointmentCode,
-      turnCode,
-      String(data.especialidad || ''),
-      String(data.fecha || ''),
-      String(data.hora || ''),
-      'En espera',
-      'Por confirmar'
-    ]);
+    createTurnIfMissing(turnSheet, {
+      codigo: appointmentCode,
+      especialidad: String(data.especialidad || ''),
+      fecha: String(data.fecha || ''),
+      hora: String(data.hora || '')
+    });
 
     return ContentService
       .createTextOutput(JSON.stringify({ ok: true }))
