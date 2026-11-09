@@ -41,7 +41,7 @@
                 function cleanup() { clearTimeout(timeout); delete window[callback]; script.remove(); }
                 window[callback] = function (data) { cleanup(); render(data); };
                 script.onerror = cleanup;
-                script.src = endpoint + '?action=pantalla_turnos&fecha=' + encodeURIComponent(todayForSheet()) + '&callback=' + callback;
+                script.src = endpoint + '?action=pantalla_turnos&fecha=' + encodeURIComponent(todayForSheet()) + '&callback=' + callback + '&t=' + Date.now();
                 document.body.appendChild(script);
             }
             function render(data) {
@@ -55,6 +55,7 @@
             document.getElementById('fullscreenButton').addEventListener('click', function () { if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); });
             updateClock(); callEndpoint(); setInterval(updateClock, 1000); setInterval(callEndpoint, 3000);
             window.addEventListener('focus', callEndpoint);
+            document.addEventListener('visibilitychange', function () { if (!document.hidden) callEndpoint(); });
         }());
     </script>
 </body>
