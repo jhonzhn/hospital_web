@@ -32,9 +32,20 @@
                 return values.day + '/' + values.month + '/' + values.year;
             }
             function updateClock() { const now = new Date(); queueDate.textContent = dateFormatter.format(now); queueTime.textContent = timeFormatter.format(now); }
-            function callEndpoint() {
+            async function callEndpoint() {
                 const endpoint = window.SJDD_GOOGLE_SHEETS_URL;
                 if (!endpoint) return;
+                const requestUrl = endpoint + '?action=pantalla_turnos&fecha=' + encodeURIComponent(todayForSheet()) + '&t=' + Date.now();
+                try {
+                    const response = await fetch(requestUrl, { cache: 'no-store' });
+                    if (!response.ok) throw new Error('No se pudo actualizar la pantalla.');
+                    render(await response.json());
+                    return;
+                } catch (error) {
+                    callEndpointWithJsonp(endpoint);
+                }
+            }
+            function callEndpointWithJsonp(endpoint) {
                 const callback = '__sjddQueue' + Date.now();
                 const script = document.createElement('script');
                 const timeout = setTimeout(cleanup, 10000);
